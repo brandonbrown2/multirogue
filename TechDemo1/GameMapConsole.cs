@@ -165,8 +165,11 @@ namespace TechDemo1
             if (info.LeftClicked)
             {
                 base.ProcessMouse(info);
-                MoveTargetTo(info.ConsoleLocation);
-                isMoving = true;
+                if (info.Console == this)
+                {
+                    MoveTargetTo(info.ConsoleLocation);
+                    isMoving = true;
+                }
             }
             return false;
         }
