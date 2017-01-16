@@ -11,13 +11,17 @@ namespace TechDemo1
         public GameMapConsole ViewConsole;
         public StatsPanel StatsConsole;
         public ChatPanel MessageConsole;
+        private int keyWaitCounter, keyWait = 5;
 
         private Console messageHeaderConsole;
+        private bool firstKey;
 
         public GameScreen()
         {
+            keyWaitCounter = 0;
+            firstKey = true;
             StatsConsole = new StatsPanel(52, 37);
-            ViewConsole = new GameMapConsole(127, 37, 300, 300);
+            ViewConsole = new GameMapConsole(127, 37, 150, 150);
             //ViewConsole.FillWithRandomGarbage(); // Temporary so we can see where the console is on the screen
             MessageConsole = new ChatPanel(127, 11);
 
@@ -57,30 +61,49 @@ namespace TechDemo1
         }
         public override bool ProcessKeyboard(KeyboardInfo info)
         {
-            int moveScale = 1;
+            int moveScale = 0;
+            if (keyWaitCounter >= keyWait)
+            {
+                keyWaitCounter = 0;
+                moveScale = 1;
+                if (firstKey)
+                {
+                    keyWaitCounter = -keyWait * 2;
+                    firstKey = false;
+                }
+            }
+
             if (info.KeysDown.Contains(AsciiKey.Get(Microsoft.Xna.Framework.Input.Keys.LeftShift)))
             {
-                moveScale = 5;
+                moveScale = moveScale * 5;
             }
-
-            if (info.KeysPressed.Contains(AsciiKey.Get(Microsoft.Xna.Framework.Input.Keys.Down)))
+            
+            if (info.KeysDown.Contains(AsciiKey.Get(Microsoft.Xna.Framework.Input.Keys.Down)))
             {
+                keyWaitCounter++;
                 ViewConsole.MoveTargetBy(new Point(0, moveScale));
             }
-            else if (info.KeysPressed.Contains(AsciiKey.Get(Microsoft.Xna.Framework.Input.Keys.Up)))
+            else if (info.KeysDown.Contains(AsciiKey.Get(Microsoft.Xna.Framework.Input.Keys.Up)))
             {
+                keyWaitCounter++;
                 ViewConsole.MoveTargetBy(new Point(0, -moveScale));
             }
-            if (info.KeysPressed.Contains(AsciiKey.Get(Microsoft.Xna.Framework.Input.Keys.Right)))
+            else if (info.KeysDown.Contains(AsciiKey.Get(Microsoft.Xna.Framework.Input.Keys.Right)))
             {
+                keyWaitCounter++;
                 ViewConsole.MoveTargetBy(new Point(moveScale, 0));
             }
-            else if (info.KeysPressed.Contains(AsciiKey.Get(Microsoft.Xna.Framework.Input.Keys.Left)))
+            else if (info.KeysDown.Contains(AsciiKey.Get(Microsoft.Xna.Framework.Input.Keys.Left)))
             {
+                keyWaitCounter++;
                 ViewConsole.MoveTargetBy(new Point(-moveScale, 0));
+            } else
+            {
+                firstKey = true;
+                keyWaitCounter = keyWait;
             }
 
-            if (info.KeysPressed.Contains(AsciiKey.Get(Microsoft.Xna.Framework.Input.Keys.M)))
+            if (info.KeysPressed.Contains(AsciiKey.Get(Microsoft.Xna.Framework.Input.Keys.RightShift)))
             {
                 ViewConsole.isMoving = true;
             }

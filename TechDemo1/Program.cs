@@ -11,10 +11,13 @@ namespace TechDemo1
 {
     class Program
     {
+        public static GameWindow window;
         static void Main(string[] args)
         {
             // Setup the engine and creat the main window.
-            SadConsole.Engine.Initialize("IBM.font", 180, 48);
+            SadConsole.Engine.Initialize("IBM.font", 180, 48, (g) => {
+                window = g.Window;
+            });
 
             // Hook the start event so we can add consoles to the system.
             SadConsole.Engine.EngineStart += Engine_EngineStart;
@@ -32,7 +35,7 @@ namespace TechDemo1
             SadConsole.Engine.ConsoleRenderStack.Clear();
             SadConsole.Engine.ActiveConsole = null;
 
-            GameWorld.Start();
+            GameWorld.Start(window);
         }
 
         private static void Engine_EngineUpdated(object sender, EventArgs e)

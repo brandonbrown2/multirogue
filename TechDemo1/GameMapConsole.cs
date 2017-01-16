@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 using SadConsole.Game;
 using SadConsole.Consoles;
 using SadConsole.Input;
+using System.Threading;
 //using RogueSharp;
 
 namespace TechDemo1
@@ -19,8 +20,24 @@ namespace TechDemo1
         private GameObject target;
         SadConsole.CellAppearance[,] mapData;
         protected RogueSharp.PathFinder pathing;
+        RogueSharp.Path path;
         protected int currentTicks, maxTicks;
-        public bool isMoving;
+        private bool _isMoving;
+        public bool isMoving
+        {
+            get { return _isMoving; }
+            set { _isMoving = value;
+                if (rogueMap == null)
+                {
+                    return;
+                }
+                if (value == true)
+                {
+                    calcPath();
+                }
+            }
+        }
+
 
         public GameObject Player { get { return playerEntity; } }
 
@@ -50,14 +67,15 @@ namespace TechDemo1
             target.Position = new Point(1, 1);
             GenerateMap();
             pathing = new RogueSharp.PathFinder(rogueMap);
+          //  rogueMap.GetCell(9,9).
         }
 
         private void GenerateMap()
         {
             // Create the map
             RogueSharp.MapCreation.IMapCreationStrategy<RogueSharp.Map> mapCreationStrategy
-                = new RogueSharp.MapCreation.RandomRoomsMapCreationStrategy<RogueSharp.Map>(Width, Height, 100, 15, 4);
-
+                = new MapTypes.SimpleMapCreationStrategy<RogueSharp.Map>(Width, Height, 100, 30, 10);
+            
             rogueMap = RogueSharp.Map.Create(mapCreationStrategy);
 
             // Create the local cache of map data
@@ -126,18 +144,7 @@ namespace TechDemo1
             }
         }
 
-        public override bool ProcessMouse(MouseInfo info)
-        {
-            if (info.LeftClicked)
-            {
-                base.ProcessMouse(info);
-                target.Position = info.ConsoleLocation;
-                isMoving = true;
-            }
-            return false;
-        }
-
-        public void MoveTowardsTarget()
+        private void calcPath()
         {
             if ((playerEntity.Position.X == this.target.Position.X) && (playerEntity.Position.Y == this.target.Position.Y))
             {
@@ -146,14 +153,39 @@ namespace TechDemo1
             }
             try
             {
-                RogueSharp.Path path = pathing.ShortestPath(rogueMap.GetCell(playerEntity.Position.X, playerEntity.Position.Y), rogueMap.GetCell(target.Position.X, target.Position.Y));
-                RogueSharp.Cell targetCell = path.CurrentStep;
-                MovePlayerBy(new Point(targetCell.X, targetCell.Y) - playerEntity.Position);
+                path = pathing.ShortestPath(rogueMap.GetCell(playerEntity.Position.X, playerEntity.Position.Y), rogueMap.GetCell(target.Position.X, target.Position.Y));
             } catch (Exception e)
             {
                 isMoving = false;
             }
         }
+
+        public override bool ProcessMouse(MouseInfo info)
+        {
+            if (info.LeftClicked)
+            {
+                base.ProcessMouse(info);
+                MoveTargetTo(info.ConsoleLocation);
+                isMoving = true;
+            }
+            return false;
+        }
+
+        public void MoveTowardsTarget()
+        {
+            if (path.CurrentStep != path.End)
+            {
+                RogueSharp.Cell targetCell = path.CurrentStep;
+                MovePlayerBy(new Point(targetCell.X, targetCell.Y) - playerEntity.Position);
+                path.StepForward();
+            } else
+            {
+                RogueSharp.Cell targetCell = path.CurrentStep;
+                MovePlayerBy(new Point(targetCell.X, targetCell.Y) - playerEntity.Position);
+                isMoving = false;
+            }
+        }
+
         public void MovePlayerBy(Point amount)
         {
             // Get the position the player will be at
@@ -179,11 +211,24 @@ namespace TechDemo1
         {
             Point newPosition = target.Position + amount;
             // Check to see if the position is within the map
-            if (new Rectangle(0, 0, Width, Height).Contains(newPosition))
-            {
-                // Move the target
-                target.Position += amount;
-            }
+            if (TextSurface.RenderArea.Contains(newPosition))
+                if ((new Rectangle(0, 0, Width, Height).Contains(newPosition))
+                        && (TextSurface.RenderArea.Contains(newPosition)))
+                {
+                    // Move the target
+                    target.Position += amount;
+                }
+        }
+        public void MoveTargetTo(Point newPosition)
+        {
+            // Check to see if the position is within the map
+            if (TextSurface.RenderArea.Contains(newPosition))
+                if ((new Rectangle(0, 0, Width, Height).Contains(newPosition))
+                        && (TextSurface.RenderArea.Contains(newPosition)))
+                {
+                    // Move the target
+                    target.Position = newPosition;
+                }
         }
     }
 }
