@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{535D4204-3D3B-4962-8DC1-BD9E311D3FB2}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TechDemo1</RootNamespace>
     <AssemblyName>TechDemo1</AssemblyName>
@@ -32,6 +32,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework, Version=3.5.1.1679, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MonoGame.Framework.WindowsDX.3.5.1.1679\lib\net40\MonoGame.Framework.dll</HintPath>
@@ -49,24 +52,12 @@
       <HintPath>..\packages\SadConsole.Controls.MonoGameGL.4.0.1\lib\net45\SadConsole.Controls.OpenGL.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SadConsole.Controls.Windows, Version=4.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SadConsole.Controls.4.0.1\lib\net45\SadConsole.Controls.Windows.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="SadConsole.Core.OpenGL, Version=5.2.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SadConsole.Core.MonoGameGL.5.2.1\lib\net45\SadConsole.Core.OpenGL.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SadConsole.Core.Windows, Version=5.2.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SadConsole.Core.5.2.1\lib\net45\SadConsole.Core.Windows.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="SadConsole.GameHelpers.OpenGL, Version=4.5.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SadConsole.GameHelpers.MonoGameGL.4.5.0\lib\net45\SadConsole.GameHelpers.OpenGL.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="SadConsole.GameHelpers.Windows, Version=4.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SadConsole.GameHelpers.4.5.0\lib\net45\SadConsole.GameHelpers.Windows.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
