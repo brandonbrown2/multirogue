@@ -2,12 +2,13 @@
 using SadConsole.Consoles;
 using System;
 using Console = SadConsole.Consoles.Console;
+using SadConsole.Input;
 
 namespace TechDemo1
 {
     class GameScreen : SadConsole.Consoles.ConsoleList
     {
-        public Console ViewConsole;
+        public GameMapConsole ViewConsole;
         public StatsPanel StatsConsole;
         public ChatPanel MessageConsole;
 
@@ -16,15 +17,17 @@ namespace TechDemo1
         public GameScreen()
         {
             StatsConsole = new StatsPanel(52, 37);
-            ViewConsole = new Console(127, 37);
-            ViewConsole.FillWithRandomGarbage(); // Temporary so we can see where the console is on the screen
+            ViewConsole = new GameMapConsole(127, 37, 300, 300);
+            //ViewConsole.FillWithRandomGarbage(); // Temporary so we can see where the console is on the screen
             MessageConsole = new ChatPanel(127, 11);
 
             // Setup the message header to be as wide as the screen but only 1 character high
             messageHeaderConsole = new Console(180, 1);
             messageHeaderConsole.DoUpdate = false;
-            messageHeaderConsole.CanUseKeyboard = false;
+            messageHeaderConsole.CanUseKeyboard = true;
             messageHeaderConsole.CanUseMouse = false;
+
+            SadConsole.Engine.ActiveConsole = this;
 
             // Draw the line for the header
             messageHeaderConsole.Fill(Color.White, Color.Black, 196, null);
@@ -43,18 +46,34 @@ namespace TechDemo1
             Add(StatsConsole);
             Add(ViewConsole);
             Add(MessageConsole);
-
-
-            SadConsole.Engine.EngineUpdated += spam;
+            CanUseKeyboard = true;
 
             // Placeholder stuff for the stats screen
             StatsConsole.CharacterName = "Fred";
             StatsConsole.MaxHealth = 200;
             StatsConsole.Health = 100;
         }
-        private void spam(object sender, EventArgs e)
+        public override bool ProcessKeyboard(KeyboardInfo info)
         {
-            ViewConsole.FillWithRandomGarbage();
+            if (info.KeysPressed.Contains(AsciiKey.Get(Microsoft.Xna.Framework.Input.Keys.Down)))
+            {
+                ViewConsole.MovePlayerBy(new Point(0, 1));
+            }
+            else if (info.KeysPressed.Contains(AsciiKey.Get(Microsoft.Xna.Framework.Input.Keys.Up)))
+            {
+                ViewConsole.MovePlayerBy(new Point(0, -1));
+            }
+
+            if (info.KeysPressed.Contains(AsciiKey.Get(Microsoft.Xna.Framework.Input.Keys.Right)))
+            {
+                ViewConsole.MovePlayerBy(new Point(1, 0));
+            }
+            else if (info.KeysPressed.Contains(AsciiKey.Get(Microsoft.Xna.Framework.Input.Keys.Left)))
+            {
+                ViewConsole.MovePlayerBy(new Point(-1, 0));
+            }
+
+            return false;
         }
     }
 }

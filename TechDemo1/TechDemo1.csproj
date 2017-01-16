@@ -48,6 +48,10 @@
       <HintPath>..\packages\MonoGame.Framework.DesktopGL.3.5.1.1679\lib\net40\OpenTK.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="RogueSharp, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RogueSharp.3.0.0\lib\portable-net40+sl50+win+wpa81+wp80\RogueSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="SadConsole.Controls.OpenGL, Version=4.0.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SadConsole.Controls.MonoGameGL.4.0.1\lib\net45\SadConsole.Controls.OpenGL.dll</HintPath>
       <Private>True</Private>
@@ -71,8 +75,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChatPanel.cs" />
+    <Compile Include="GameMapConsole.cs" />
     <Compile Include="GameScreen.cs" />
     <Compile Include="GameWorld.cs" />
+    <Compile Include="MapObjects\Floor.cs" />
+    <Compile Include="MapObjects\Wall.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StatsPanel.cs" />
