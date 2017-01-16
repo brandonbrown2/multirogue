@@ -128,7 +128,7 @@ namespace TechDemo1
 
         public override bool ProcessMouse(MouseInfo info)
         {
-            if (info.LeftButtonDown)
+            if (info.LeftClicked)
             {
                 base.ProcessMouse(info);
                 target.Position = info.ConsoleLocation;

@@ -57,21 +57,27 @@ namespace TechDemo1
         }
         public override bool ProcessKeyboard(KeyboardInfo info)
         {
+            int moveScale = 1;
+            if (info.KeysDown.Contains(AsciiKey.Get(Microsoft.Xna.Framework.Input.Keys.LeftShift)))
+            {
+                moveScale = 5;
+            }
+
             if (info.KeysPressed.Contains(AsciiKey.Get(Microsoft.Xna.Framework.Input.Keys.Down)))
             {
-                ViewConsole.MoveTargetBy(new Point(0, 1));
+                ViewConsole.MoveTargetBy(new Point(0, moveScale));
             }
             else if (info.KeysPressed.Contains(AsciiKey.Get(Microsoft.Xna.Framework.Input.Keys.Up)))
             {
-                ViewConsole.MoveTargetBy(new Point(0, -1));
+                ViewConsole.MoveTargetBy(new Point(0, -moveScale));
             }
             if (info.KeysPressed.Contains(AsciiKey.Get(Microsoft.Xna.Framework.Input.Keys.Right)))
             {
-                ViewConsole.MoveTargetBy(new Point(1, 0));
+                ViewConsole.MoveTargetBy(new Point(moveScale, 0));
             }
             else if (info.KeysPressed.Contains(AsciiKey.Get(Microsoft.Xna.Framework.Input.Keys.Left)))
             {
-                ViewConsole.MoveTargetBy(new Point(-1, 0));
+                ViewConsole.MoveTargetBy(new Point(-moveScale, 0));
             }
 
             if (info.KeysPressed.Contains(AsciiKey.Get(Microsoft.Xna.Framework.Input.Keys.M)))
