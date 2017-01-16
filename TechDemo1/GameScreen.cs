@@ -19,7 +19,7 @@ namespace TechDemo1
             ViewConsole = new Console(127, 37);
             ViewConsole.FillWithRandomGarbage(); // Temporary so we can see where the console is on the screen
             MessageConsole = new ChatPanel(127, 11);
-            
+
             // Setup the message header to be as wide as the screen but only 1 character high
             messageHeaderConsole = new Console(180, 1);
             messageHeaderConsole.DoUpdate = false;
@@ -44,10 +44,17 @@ namespace TechDemo1
             Add(ViewConsole);
             Add(MessageConsole);
 
+
+            SadConsole.Engine.EngineUpdated += spam;
+
             // Placeholder stuff for the stats screen
             StatsConsole.CharacterName = "Fred";
             StatsConsole.MaxHealth = 200;
             StatsConsole.Health = 100;
+        }
+        private void spam(object sender, EventArgs e)
+        {
+            ViewConsole.FillWithRandomGarbage();
         }
     }
 }
