@@ -28,6 +28,7 @@ namespace TechDemo1
             messageHeaderConsole.CanUseMouse = false;
 
             SadConsole.Engine.ActiveConsole = this;
+            SadConsole.Engine.UseMouse = true;
 
             // Draw the line for the header
             messageHeaderConsole.Fill(Color.White, Color.Black, 196, null);
@@ -47,6 +48,7 @@ namespace TechDemo1
             Add(ViewConsole);
             Add(MessageConsole);
             CanUseKeyboard = true;
+            CanUseMouse = true;
 
             // Placeholder stuff for the stats screen
             StatsConsole.CharacterName = "Fred";
@@ -57,22 +59,35 @@ namespace TechDemo1
         {
             if (info.KeysPressed.Contains(AsciiKey.Get(Microsoft.Xna.Framework.Input.Keys.Down)))
             {
-                ViewConsole.MovePlayerBy(new Point(0, 1));
+                ViewConsole.MoveTargetBy(new Point(0, 1));
             }
             else if (info.KeysPressed.Contains(AsciiKey.Get(Microsoft.Xna.Framework.Input.Keys.Up)))
             {
-                ViewConsole.MovePlayerBy(new Point(0, -1));
+                ViewConsole.MoveTargetBy(new Point(0, -1));
             }
-
             if (info.KeysPressed.Contains(AsciiKey.Get(Microsoft.Xna.Framework.Input.Keys.Right)))
             {
-                ViewConsole.MovePlayerBy(new Point(1, 0));
+                ViewConsole.MoveTargetBy(new Point(1, 0));
             }
             else if (info.KeysPressed.Contains(AsciiKey.Get(Microsoft.Xna.Framework.Input.Keys.Left)))
             {
-                ViewConsole.MovePlayerBy(new Point(-1, 0));
+                ViewConsole.MoveTargetBy(new Point(-1, 0));
             }
 
+            if (info.KeysPressed.Contains(AsciiKey.Get(Microsoft.Xna.Framework.Input.Keys.M)))
+            {
+                ViewConsole.isMoving = true;
+            }
+
+            return false;
+        }
+        public override bool ProcessMouse(MouseInfo info)
+        {
+            base.ProcessMouse(info);
+            if (info.LeftClicked)
+            {
+                MessageConsole.PrintMessage(info.WorldLocation.ToString());
+            }
             return false;
         }
     }
