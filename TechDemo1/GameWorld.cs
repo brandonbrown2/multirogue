@@ -19,7 +19,7 @@ namespace TechDemo1
         {
             GameWorld.window = window;
             window.AllowUserResizing = true;
-            MainScreen = new GameScreen();
+            MainScreen = new GameScreen(new RogueSharp.Random.DotNetRandom(/*Put Seed Here*/));
             SadConsole.Engine.ConsoleRenderStack.Add(MainScreen);
             MainScreen.MessageConsole.PrintMessage("Welcome to THE GAME...");
         }

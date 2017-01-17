@@ -13,6 +13,7 @@ using SadConsole.Input;
 using System.Threading;
 using TechDemo1.Map;
 using RogueSharp;
+using RogueSharp.Random;
 
 namespace TechDemo1
 {
@@ -42,7 +43,14 @@ namespace TechDemo1
 
         public GameObject Player { get { return playerEntity; } }
 
-        public GameMapConsole(int viewWidth, int viewHeight, int mapWidth, int mapHeight) : base(mapWidth, mapHeight)
+        public GameMapConsole(int viewWidth, int viewHeight, int mapWidth, int mapHeight)
+            : this(viewWidth, viewHeight, mapWidth, mapHeight, new RogueSharp.Random.DotNetRandom())
+        {
+
+        }
+
+        public GameMapConsole(int viewWidth, int viewHeight, int mapWidth, int mapHeight, IRandom r)
+            : base(mapWidth, mapHeight)
         {
             currentTicks = 0;
             maxTicks = 5;
@@ -69,7 +77,7 @@ namespace TechDemo1
             target.Position = new Point(1, 1);
 
             RogueSharp.MapCreation.IMapCreationStrategy<GameMap> mapCreationStrategy
-                = new MapTypes.SimpleMapCreationStrategy<GameMap>(mapWidth, mapHeight, 100, 30, 10);
+                = new MapTypes.SimpleMapCreationStrategy<GameMap>(mapWidth, mapHeight, 100, 30, 10, r);
 
             rogueMap = mapCreationStrategy.CreateMap();
             rogueMap.CopyApearanceTo(this);

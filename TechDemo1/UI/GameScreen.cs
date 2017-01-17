@@ -16,12 +16,16 @@ namespace TechDemo1
         private Console messageHeaderConsole;
         private bool firstKey;
 
-        public GameScreen()
+        public GameScreen() : this(new RogueSharp.Random.DotNetRandom())
+        {
+
+        }
+        public GameScreen(RogueSharp.Random.DotNetRandom r)
         {
             keyWaitCounter = 0;
             firstKey = true;
             StatsConsole = new StatsPanel(52, 37);
-            ViewConsole = new GameMapConsole(127, 37, 150, 150);
+            ViewConsole = new GameMapConsole(127, 37, 150, 150, r);
             //ViewConsole.FillWithRandomGarbage(); // Temporary so we can see where the console is on the screen
             MessageConsole = new ChatPanel(127, 11);
 
