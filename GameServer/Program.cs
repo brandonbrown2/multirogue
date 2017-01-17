@@ -2,15 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using TechDemo1.Map;
 using Lidgren;
 using Lidgren.Network;
+using RogueSharp.Random;
 
 namespace GameServer
 {
     class Program
     {
+        static private int port;
+        static private NetServer server;
+        static private Thread clientHandler;
+        static private int mapSeed;
         static void Main(string[] args)
         {
             if (args.Length != 1)
@@ -19,8 +25,7 @@ namespace GameServer
                 Console.ReadKey();
                 return;
             }
-
-            int port;
+            
             if (!Int32.TryParse(args[0], out port))
             {
                 Console.WriteLine("Bad port argument!");
@@ -29,13 +34,19 @@ namespace GameServer
             else if (port > 0)
             {
                 //TODO: Create Map
-                //TODO: Init Incoming Data Handler thread
                 //TODO: Init Outgoing Data Handler thread
                 //TODO: Init Simulation(?)
-                var config = new NetPeerConfiguration("Multirogue Server") { Port = port };
-                var server = new NetServer(config);
-                server.Start();
                 Console.WriteLine("Good port!");
+                var randomgen = new RogueSharp.Random.DotNetRandom();
+                mapSeed = randomgen.Next(Int32.MaxValue - 1);
+                Console.WriteLine("Map Generated!");
+                var config = new NetPeerConfiguration("Multirogue Server") { Port = port };
+                server = new NetServer(config);
+                server.Start();
+                Console.WriteLine("Server Initialized!");
+                ClientHandler c = new ClientHandler(server, mapSeed);
+                clientHandler = new Thread(c.ClientMessageRecieverThread);
+                Console.WriteLine("Client Handler Initialized!");
                 Console.ReadKey();
             }
             else

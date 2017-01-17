@@ -100,6 +100,7 @@
   <ItemGroup>
     <Compile Include="Entities\Character.cs" />
     <Compile Include="Map\GameMap.cs" />
+    <Compile Include="NetworkClient\NetworkClient.cs" />
     <Compile Include="UI\ChatPanel.cs" />
     <Compile Include="UI\GameMapConsole.cs" />
     <Compile Include="UI\GameScreen.cs" />
@@ -135,9 +136,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="NetworkClient\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
