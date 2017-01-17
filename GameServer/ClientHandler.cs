@@ -20,17 +20,20 @@ namespace GameServer
 
         public void ClientMessageRecieverThread()
         {
-            server.MessageReceivedEvent.WaitOne();
-
-            var msg = server.ReadMessage();
-            if(msg.MessageType == NetIncomingMessageType.StatusChanged)
+            while (true)
             {
-                if(msg.SenderConnection.Status == NetConnectionStatus.Connected)
+                server.MessageReceivedEvent.WaitOne();
+
+                var msg = server.ReadMessage();
+                if (msg.MessageType == NetIncomingMessageType.StatusChanged)
                 {
-                    NetOutgoingMessage mapSeed = server.CreateMessage();
-                    mapSeed.Write("Map Seed Value");
-                    mapSeed.Write(mapSeedValue);
-                    server.SendMessage(mapSeed, msg.SenderConnection, NetDeliveryMethod.ReliableOrdered);
+                    if (msg.SenderConnection.Status == NetConnectionStatus.Connected)
+                    {
+                        NetOutgoingMessage mapSeed = server.CreateMessage();
+                        mapSeed.Write("Map Seed Value");
+                        mapSeed.Write(mapSeedValue);
+                        server.SendMessage(mapSeed, msg.SenderConnection, NetDeliveryMethod.ReliableOrdered);
+                    }
                 }
             }
         }

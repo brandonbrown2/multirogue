@@ -16,7 +16,7 @@ namespace TechDemo1
         static void Main(string[] args)
         {
             NetworkClient.NetworkClient net = new NetworkClient.NetworkClient();
-            net.seedRecived += StartYourEngine;
+            net.seedReceived += StartYourEngine;
 
             System.Console.Write("IP : ");
             String ip = System.Console.ReadLine();
