@@ -15,6 +15,7 @@ using TechDemo1.Map;
 using RogueSharp;
 using RogueSharp.Random;
 using TechDemo1.Entities;
+using TechDemo1.UI;
 
 namespace TechDemo1
 {
@@ -22,7 +23,7 @@ namespace TechDemo1
     {
         public GameMap rogueMap;
         private PlayerCharacterLocal playerEntity;
-        protected int currentTicks, maxTicks;
+        private PlayerCharacterRemote remotePlayerEntity;
         protected bool viewMoved = true;
 
         public PlayerCharacterLocal Player { get { return playerEntity; } }
@@ -36,29 +37,21 @@ namespace TechDemo1
         public GameMapConsole(int viewWidth, int viewHeight, int mapWidth, int mapHeight, IRandom r)
             : base(mapWidth, mapHeight)
         {
-            currentTicks = 0;
-            maxTicks = 5;
-
             TextSurface.RenderArea = new Rectangle(0, 0, viewWidth, viewHeight);
-
-            AnimatedTextSurface playerAnimation = new AnimatedTextSurface("default", 1, 1, Engine.DefaultFont);
-            playerAnimation.CreateFrame();
-            playerAnimation.CurrentFrame[0].Foreground = Color.Orange;
-            playerAnimation.CurrentFrame[0].GlyphIndex = '@';
-
-            AnimatedTextSurface targetAnimation = new AnimatedTextSurface("default", 1, 1, Engine.DefaultFont);
-            targetAnimation.CreateFrame();
-            targetAnimation.CurrentFrame[0].Foreground = Color.Red;
-            targetAnimation.CurrentFrame[0].GlyphIndex = 'X';
 
             playerEntity = new PlayerCharacterLocal(this);
             playerEntity.Font = Engine.DefaultFont;
-            playerEntity.Animation = playerAnimation;
+            playerEntity.Animation = UIConstants.playerAnimation;
             playerEntity.Position = new Point(1, 1);
 
             playerEntity.target = new GameObject(Engine.DefaultFont);
-            playerEntity.target.Animation = targetAnimation;
+            playerEntity.target.Animation = UIConstants.targetAnimation;
             playerEntity.target.Position = new Point(1, 1);
+
+            remotePlayerEntity = new PlayerCharacterRemote(this);
+            remotePlayerEntity.Font = Engine.DefaultFont;
+            remotePlayerEntity.Animation = UIConstants.SecondPlayerAnimation;
+            remotePlayerEntity.Position = new Point(1, 1);
 
             RogueSharp.MapCreation.IMapCreationStrategy<GameMap> mapCreationStrategy
                 = new MapTypes.SimpleMapCreationStrategy<GameMap>(mapWidth, mapHeight, 100, 30, 10, r);
@@ -73,10 +66,10 @@ namespace TechDemo1
             playerEntity.Teleport();
             CenterViewOn(playerEntity.Position);
         }
-        public void MovePlayer()
+        public void pathCharacterTo(Character entity, Point target)
         {
-            playerEntity.Path = rogueMap.calcPath(playerEntity.Position, playerEntity.target.Position);
-            playerEntity.isMoving = true;
+            entity.Path = rogueMap.calcPath(entity.Position, target);
+            entity.isMoving = true;
         }
         public override void Render()
         {
@@ -87,9 +80,11 @@ namespace TechDemo1
             {
                 playerEntity.RenderOffset = Position - TextSurface.RenderArea.Location;
                 playerEntity.target.RenderOffset = Position - TextSurface.RenderArea.Location;
+                remotePlayerEntity.RenderOffset = Position - TextSurface.RenderArea.Location;
             }
             playerEntity.target.Render();
             playerEntity.Render();
+            remotePlayerEntity.Render();
         }
 
         public override void Update()
@@ -97,12 +92,7 @@ namespace TechDemo1
             base.Update();
             playerEntity.Update();
             playerEntity.target.Update();
-            currentTicks++;
-            if ((currentTicks >= maxTicks) && (playerEntity.isMoving))
-            {
-                currentTicks = 0;
-                playerEntity.MoveTowardsTarget();
-            }
+            remotePlayerEntity.Update();
         }
 
 
@@ -115,7 +105,7 @@ namespace TechDemo1
                 {
                     playerEntity.MoveTargetTo(info.ConsoleLocation);
                     playerEntity.isMoving = true;
-                    MovePlayer();
+                    pathCharacterTo(playerEntity, playerEntity.target.Position);
                 }
             }
             return false;

@@ -10,12 +10,32 @@ namespace TechDemo1.Entities
     {
         public Path Path;
         public GameMapConsole ParentConsole;
-        public bool isMoving;
-        
+        protected int currentTicks, maxTicks;
+        public bool isMoving, isFocus;
+
         public Character(GameMapConsole ParentConsole)
         {
+            isFocus = false;
+            currentTicks = 0;
+            maxTicks = 5;
             isMoving = false;
             this.ParentConsole = ParentConsole;
+        }
+        public override void Update()
+        {
+            currentTicks++;
+            if ((currentTicks >= maxTicks) && (isMoving))
+            {
+                currentTicks = 0;
+                MoveTowardsTarget();
+            }
+        }
+        public override void Render()
+        {
+            if (ParentConsole.isWithinScreen(position))
+            {
+                base.Render();
+            }
         }
         public virtual void Move(Point amount)
         {
@@ -33,14 +53,20 @@ namespace TechDemo1.Entities
                 {
                     RogueSharp.Cell targetCell = Path.CurrentStep;
                     MoveTo(new Point(targetCell.X, targetCell.Y));
-                    ParentConsole.CenterViewOn(Position);
+                    if (isFocus)
+                    {
+                        ParentConsole.CenterViewOn(Position);
+                    }
                     Path.StepForward();
                 }
                 else
                 {
                     RogueSharp.Cell targetCell = Path.CurrentStep;
                     MoveTo(new Point(targetCell.X, targetCell.Y));
-                    ParentConsole.CenterViewOn(Position);
+                    if (isFocus)
+                    {
+                        ParentConsole.CenterViewOn(Position);
+                    }
                     isMoving = false;
                 }
             }

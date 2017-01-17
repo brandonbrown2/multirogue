@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TechDemo1.UI;
 
 namespace TechDemo1
 {
@@ -18,8 +19,10 @@ namespace TechDemo1
         /// </summary>
         public static void Start(GameWindow window)
         {
+            UIConstants.init();
             GameWorld.window = window;
             window.AllowUserResizing = true;
+
             MainScreen = new GameScreen(new RogueSharp.Random.DotNetRandom(seed));
             SadConsole.Engine.ConsoleRenderStack.Add(MainScreen);
             MainScreen.MessageConsole.PrintMessage("Welcome to THE GAME...");

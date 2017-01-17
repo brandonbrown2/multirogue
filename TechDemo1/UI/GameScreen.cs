@@ -111,7 +111,7 @@ namespace TechDemo1
 
             if (info.KeysPressed.Contains(AsciiKey.Get(Microsoft.Xna.Framework.Input.Keys.RightShift)))
             {
-                ViewConsole.MovePlayer();
+                ViewConsole.pathCharacterTo(player, player.target.Position);
             }
 
             return false;

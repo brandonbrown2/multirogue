@@ -14,6 +14,7 @@ namespace TechDemo1.Entities
 
         public PlayerCharacterLocal(GameMapConsole ParentConsole) : base(ParentConsole)
         {
+            isFocus = true;
         }
 
         public override void Move(Point amount)

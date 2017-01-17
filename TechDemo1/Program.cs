@@ -30,6 +30,7 @@ namespace TechDemo1
             {
                 System.Console.WriteLine(e.Message);
                 System.Console.ReadKey();
+                StartYourEngine(null, new Random().Next());
             }
         }
 
