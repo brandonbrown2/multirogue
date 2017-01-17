@@ -56,8 +56,8 @@
       <HintPath>..\packages\SadConsole.Controls.MonoGameGL.4.0.1\lib\net45\SadConsole.Controls.OpenGL.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SadConsole.Core.OpenGL, Version=5.2.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SadConsole.Core.MonoGameGL.5.2.1\lib\net45\SadConsole.Core.OpenGL.dll</HintPath>
+    <Reference Include="SadConsole.Core.OpenGL, Version=5.2.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SadConsole.Core.MonoGameGL.5.2.2\lib\net45\SadConsole.Core.OpenGL.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SadConsole.GameHelpers.OpenGL, Version=4.5.0.0, Culture=neutral, processorArchitecture=MSIL">
