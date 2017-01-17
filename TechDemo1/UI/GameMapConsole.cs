@@ -138,15 +138,22 @@ namespace TechDemo1
 
         public void MoveTowardsTarget()
         {
-            if (path.CurrentStep != path.End)
+            if (path != null)
             {
-                RogueSharp.Cell targetCell = path.CurrentStep;
-                MovePlayerBy(new Point(targetCell.X, targetCell.Y) - playerEntity.Position);
-                path.StepForward();
+                if (path.CurrentStep != path.End)
+                {
+                    RogueSharp.Cell targetCell = path.CurrentStep;
+                    MovePlayerBy(new Point(targetCell.X, targetCell.Y) - playerEntity.Position);
+                    path.StepForward();
+                }
+                else
+                {
+                    RogueSharp.Cell targetCell = path.CurrentStep;
+                    MovePlayerBy(new Point(targetCell.X, targetCell.Y) - playerEntity.Position);
+                    isMoving = false;
+                }
             } else
             {
-                RogueSharp.Cell targetCell = path.CurrentStep;
-                MovePlayerBy(new Point(targetCell.X, targetCell.Y) - playerEntity.Position);
                 isMoving = false;
             }
         }

@@ -11,7 +11,7 @@ namespace TechDemo1
     {
         public static GameScreen MainScreen;
         public static GameWindow window;
-
+        
         /// <summary>
         /// Called one time to initiate everything. Assumes SadConsole has been setup and is ready to go.
         /// </summary>
