@@ -3,6 +3,7 @@ using SadConsole.Consoles;
 using System;
 using Console = SadConsole.Consoles.Console;
 using SadConsole.Input;
+using TechDemo1.Entities;
 
 namespace TechDemo1
 {
@@ -66,6 +67,7 @@ namespace TechDemo1
         public override bool ProcessKeyboard(KeyboardInfo info)
         {
             int moveScale = 0;
+            PlayerCharacterLocal player = ViewConsole.Player;
             if (keyWaitCounter >= keyWait)
             {
                 keyWaitCounter = 0;
@@ -85,22 +87,22 @@ namespace TechDemo1
             if (info.KeysDown.Contains(AsciiKey.Get(Microsoft.Xna.Framework.Input.Keys.Down)))
             {
                 keyWaitCounter++;
-                ViewConsole.MoveTargetBy(new Point(0, moveScale));
+                player.MoveTargetBy(new Point(0, moveScale));
             }
             else if (info.KeysDown.Contains(AsciiKey.Get(Microsoft.Xna.Framework.Input.Keys.Up)))
             {
                 keyWaitCounter++;
-                ViewConsole.MoveTargetBy(new Point(0, -moveScale));
+                player.MoveTargetBy(new Point(0, -moveScale));
             }
             else if (info.KeysDown.Contains(AsciiKey.Get(Microsoft.Xna.Framework.Input.Keys.Right)))
             {
                 keyWaitCounter++;
-                ViewConsole.MoveTargetBy(new Point(moveScale, 0));
+                player.MoveTargetBy(new Point(moveScale, 0));
             }
             else if (info.KeysDown.Contains(AsciiKey.Get(Microsoft.Xna.Framework.Input.Keys.Left)))
             {
                 keyWaitCounter++;
-                ViewConsole.MoveTargetBy(new Point(-moveScale, 0));
+                player.MoveTargetBy(new Point(-moveScale, 0));
             } else
             {
                 firstKey = true;
@@ -109,7 +111,7 @@ namespace TechDemo1
 
             if (info.KeysPressed.Contains(AsciiKey.Get(Microsoft.Xna.Framework.Input.Keys.RightShift)))
             {
-                ViewConsole.isMoving = true;
+                ViewConsole.MovePlayer();
             }
 
             return false;
