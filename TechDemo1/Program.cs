@@ -15,7 +15,7 @@ namespace TechDemo1
         static void Main(string[] args)
         {
             // Setup the engine and creat the main window.
-            SadConsole.Engine.Initialize("IBM.font", 180, 48, (g) => {
+            SadConsole.Engine.Initialize("Assets/Fonts/IBM.font", 180, 48, (g) => {
                 window = g.Window;
             });
 
