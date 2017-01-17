@@ -26,7 +26,7 @@ namespace GameServer
             var randomgen = new RogueSharp.Random.DotNetRandom();
             mapSeed = randomgen.Next(Int32.MaxValue - 1);
             Console.WriteLine("Map Generated!");
-            var config = new NetPeerConfiguration("Multirogue Server") { Port = port };
+            var config = new NetPeerConfiguration("Multirogue") { Port = port };
             server = new NetServer(config);
             server.Start();
             Console.WriteLine("Server Initialized!");

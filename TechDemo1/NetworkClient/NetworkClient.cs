@@ -17,13 +17,12 @@ namespace TechDemo1.NetworkClient
 
         public void ConnectToServer(string ip, int port)
         {
-            var config = new NetPeerConfiguration("Multirogue Client");
+            var config = new NetPeerConfiguration("Multirogue");
             connection = new NetClient(config);
-            connection.Start();
-            connection.Connect(ip, port);
-
             clientReciever = new Thread(this.ClientRecieverThread);
             clientReciever.Start();
+            connection.Start();
+            connection.Connect(ip, port);
         }
 
         private void ClientRecieverThread()
