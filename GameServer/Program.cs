@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TechDemo1.Map;
 using Lidgren;
+using Lidgren.Network;
 
 namespace GameServer
 {
@@ -28,10 +29,12 @@ namespace GameServer
             else if (port > 0)
             {
                 //TODO: Create Map
-                //TODO: Init Server thread
                 //TODO: Init Incoming Data Handler thread
                 //TODO: Init Outgoing Data Handler thread
                 //TODO: Init Simulation(?)
+                var config = new NetPeerConfiguration("Multirogue Server") { Port = port };
+                var server = new NetServer(config);
+                server.Start();
                 Console.WriteLine("Good port!");
                 Console.ReadKey();
             }
