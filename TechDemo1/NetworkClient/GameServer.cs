@@ -9,7 +9,7 @@ namespace TechDemo1.NetworkClient
 {
     class GameServer
     {
-        static void Main(string args[])
+        static void Main(string[] args)
         {
             if(args.Length != 1)
             {
