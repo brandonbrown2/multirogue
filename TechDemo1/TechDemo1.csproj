@@ -99,6 +99,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entities\Character.cs" />
+    <Compile Include="Entities\PlayerCharacterLocal.cs" />
+    <Compile Include="Entities\PlayerCharacterRemote.cs" />
     <Compile Include="Map\GameMap.cs" />
     <Compile Include="NetworkClient\NetworkClient.cs" />
     <Compile Include="UI\ChatPanel.cs" />

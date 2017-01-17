@@ -14,34 +14,18 @@ using System.Threading;
 using TechDemo1.Map;
 using RogueSharp;
 using RogueSharp.Random;
+using TechDemo1.Entities;
 
 namespace TechDemo1
 {
     class GameMapConsole : SadConsole.Consoles.Console
     {
-        private GameMap rogueMap;
-        GameObject playerEntity;
-        private GameObject target;
-        private Path path;
+        public GameMap rogueMap;
+        private PlayerCharacterLocal playerEntity;
         protected int currentTicks, maxTicks;
-        private bool _isMoving;
-        public bool isMoving
-        {
-            get { return _isMoving; }
-            set { _isMoving = value;
-                if (rogueMap == null)
-                {
-                    return;
-                }
-                if (value == true)
-                {
-                    path = rogueMap.calcPath(playerEntity.Position, target.Position);
-                }
-            }
-        }
+        protected bool viewMoved = true;
 
-
-        public GameObject Player { get { return playerEntity; } }
+        public PlayerCharacterLocal Player { get { return playerEntity; } }
 
         public GameMapConsole(int viewWidth, int viewHeight, int mapWidth, int mapHeight)
             : this(viewWidth, viewHeight, mapWidth, mapHeight, new RogueSharp.Random.DotNetRandom())
@@ -54,7 +38,6 @@ namespace TechDemo1
         {
             currentTicks = 0;
             maxTicks = 5;
-            isMoving = false;
 
             TextSurface.RenderArea = new Rectangle(0, 0, viewWidth, viewHeight);
 
@@ -68,13 +51,14 @@ namespace TechDemo1
             targetAnimation.CurrentFrame[0].Foreground = Color.Red;
             targetAnimation.CurrentFrame[0].GlyphIndex = 'X';
 
-            playerEntity = new GameObject(Engine.DefaultFont);
+            playerEntity = new PlayerCharacterLocal(this);
+            playerEntity.Font = Engine.DefaultFont;
             playerEntity.Animation = playerAnimation;
             playerEntity.Position = new Point(1, 1);
 
-            target = new GameObject(Engine.DefaultFont);
-            target.Animation = targetAnimation;
-            target.Position = new Point(1, 1);
+            playerEntity.target = new GameObject(Engine.DefaultFont);
+            playerEntity.target.Animation = targetAnimation;
+            playerEntity.target.Position = new Point(1, 1);
 
             RogueSharp.MapCreation.IMapCreationStrategy<GameMap> mapCreationStrategy
                 = new MapTypes.SimpleMapCreationStrategy<GameMap>(mapWidth, mapHeight, 100, 30, 10, r);
@@ -86,33 +70,25 @@ namespace TechDemo1
 
         private void PlacePlayer()
         {
-            RogueSharp.Random.IRandom random = new RogueSharp.Random.DotNetRandom();
-            while (true)
-            {
-                int x = random.Next(Width - 1);
-                int y = random.Next(Height - 1);
-                if (rogueMap.IsWalkable(x, y))
-                {
-                    playerEntity.Position = new Point(x, y);
-
-                    // Center the veiw area
-                    TextSurface.RenderArea = new Rectangle(playerEntity.Position.X - (TextSurface.RenderArea.Width / 2),
-                                                           playerEntity.Position.Y - (TextSurface.RenderArea.Height / 2),
-                                                           TextSurface.RenderArea.Width, TextSurface.RenderArea.Height);
-
-                    playerEntity.RenderOffset = this.Position - TextSurface.RenderArea.Location;
-
-                    break;
-                }
-            }
-            target.Position = playerEntity.Position;
-            MovePlayerBy(Point.Zero);
+            playerEntity.Teleport();
+            CenterViewOn(playerEntity.Position);
         }
-
+        public void MovePlayer()
+        {
+            playerEntity.Path = rogueMap.calcPath(playerEntity.Position, playerEntity.target.Position);
+            playerEntity.isMoving = true;
+        }
         public override void Render()
         {
             base.Render();
-            target.Render();
+
+            // If he view area moved, we'll keep our entity in sync with it.
+            if (viewMoved)
+            {
+                playerEntity.RenderOffset = Position - TextSurface.RenderArea.Location;
+                playerEntity.target.RenderOffset = Position - TextSurface.RenderArea.Location;
+            }
+            playerEntity.target.Render();
             playerEntity.Render();
         }
 
@@ -120,12 +96,12 @@ namespace TechDemo1
         {
             base.Update();
             playerEntity.Update();
-            target.Update();
+            playerEntity.target.Update();
             currentTicks++;
-            if ((currentTicks >= maxTicks) && (isMoving))
+            if ((currentTicks >= maxTicks) && (playerEntity.isMoving))
             {
                 currentTicks = 0;
-                MoveTowardsTarget();
+                playerEntity.MoveTowardsTarget();
             }
         }
 
@@ -137,78 +113,32 @@ namespace TechDemo1
                 base.ProcessMouse(info);
                 if (info.Console == this)
                 {
-                    MoveTargetTo(info.ConsoleLocation);
-                    isMoving = true;
+                    playerEntity.MoveTargetTo(info.ConsoleLocation);
+                    playerEntity.isMoving = true;
+                    MovePlayer();
                 }
             }
             return false;
         }
 
-        public void MoveTowardsTarget()
+        public void CenterViewOn (Point newPosition)
         {
-            if (path != null)
-            {
-                if (path.CurrentStep != path.End)
-                {
-                    RogueSharp.Cell targetCell = path.CurrentStep;
-                    MovePlayerBy(new Point(targetCell.X, targetCell.Y) - playerEntity.Position);
-                    path.StepForward();
-                }
-                else
-                {
-                    RogueSharp.Cell targetCell = path.CurrentStep;
-                    MovePlayerBy(new Point(targetCell.X, targetCell.Y) - playerEntity.Position);
-                    isMoving = false;
-                }
-            } else
-            {
-                isMoving = false;
-            }
+            // Scroll the view area to center the player on the screen
+            TextSurface.RenderArea = new Rectangle(newPosition.X - (TextSurface.RenderArea.Width / 2),
+                                                   newPosition.Y - (TextSurface.RenderArea.Height / 2),
+                                                   TextSurface.RenderArea.Width, TextSurface.RenderArea.Height);
         }
-
-        public void MovePlayerBy(Point amount)
+        public bool isWithinMap(Point newPosition)
         {
-            // Get the position the player will be at
-            Point newPosition = playerEntity.Position + amount;
-            // Check to see if the position is within the map
-            if (new Rectangle(0, 0, Width, Height).Contains(newPosition)
-                && rogueMap.IsWalkable(newPosition.X, newPosition.Y))
-            {
-                // Move the player
-                playerEntity.Position += amount;
-
-                // Scroll the view area to center the player on the screen
-                TextSurface.RenderArea = new Rectangle(playerEntity.Position.X - (TextSurface.RenderArea.Width / 2),
-                                                       playerEntity.Position.Y - (TextSurface.RenderArea.Height / 2),
-                                                       TextSurface.RenderArea.Width, TextSurface.RenderArea.Height);
-
-                // If he view area moved, we'll keep our entity in sync with it.
-                playerEntity.RenderOffset = this.Position - TextSurface.RenderArea.Location;
-                target.RenderOffset = this.Position - TextSurface.RenderArea.Location;
-            }
+            return (new Rectangle(0, 0, Width, Height)).Contains(newPosition);
         }
-        public void MoveTargetBy(Point amount)
+        public bool isWithinScreen(Point newPosition)
         {
-            Point newPosition = target.Position + amount;
-            // Check to see if the position is within the map
-            if (TextSurface.RenderArea.Contains(newPosition))
-                if ((new Rectangle(0, 0, Width, Height).Contains(newPosition))
-                        && (TextSurface.RenderArea.Contains(newPosition)))
-                {
-                    // Move the target
-                    target.Position += amount;
-                }
+            return TextSurface.RenderArea.Contains(newPosition);
         }
-        public void MoveTargetTo(Point newPosition)
+        public bool isWithinMapAndScreen(Point newPosition)
         {
-            // Check to see if the position is within the map
-            if (TextSurface.RenderArea.Contains(newPosition))
-                if ((new Rectangle(0, 0, Width, Height).Contains(newPosition))
-                        && (TextSurface.RenderArea.Contains(newPosition)))
-                {
-                    // Move the target
-                    target.Position = newPosition;
-                }
+            return (isWithinMap(newPosition) && isWithinScreen(newPosition));
         }
     }
 }
