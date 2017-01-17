@@ -11,6 +11,7 @@ namespace TechDemo1
     {
         public static GameScreen MainScreen;
         public static GameWindow window;
+        public static int seed;
         
         /// <summary>
         /// Called one time to initiate everything. Assumes SadConsole has been setup and is ready to go.
@@ -19,7 +20,7 @@ namespace TechDemo1
         {
             GameWorld.window = window;
             window.AllowUserResizing = true;
-            MainScreen = new GameScreen(new RogueSharp.Random.DotNetRandom(/*Put Seed Here*/));
+            MainScreen = new GameScreen(new RogueSharp.Random.DotNetRandom(seed));
             SadConsole.Engine.ConsoleRenderStack.Add(MainScreen);
             MainScreen.MessageConsole.PrintMessage("Welcome to THE GAME...");
         }

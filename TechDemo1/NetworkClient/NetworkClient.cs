@@ -12,6 +12,8 @@ namespace TechDemo1.NetworkClient
     {
         private NetClient connection;
         private Thread clientReciever;
+        public delegate void seedRecivedHandler(object sender, int seed);
+        public seedRecivedHandler seedRecived;
 
         public void ConnectToServer(string ip, int port)
         {
