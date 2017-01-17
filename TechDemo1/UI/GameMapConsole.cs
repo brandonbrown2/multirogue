@@ -5,21 +5,23 @@ using System.Text;
 using System.Threading.Tasks;
 using SadConsole;
 using Microsoft.Xna.Framework;
+using Point = Microsoft.Xna.Framework.Point;
+using Rectangle = Microsoft.Xna.Framework.Rectangle;
 using SadConsole.Game;
 using SadConsole.Consoles;
 using SadConsole.Input;
 using System.Threading;
 using TechDemo1.Map;
-//using RogueSharp;
+using RogueSharp;
 
 namespace TechDemo1
 {
     class GameMapConsole : SadConsole.Consoles.Console
     {
-        GameMap rogueMap;
+        private GameMap rogueMap;
         GameObject playerEntity;
         private GameObject target;
-        RogueSharp.Path path;
+        private Path path;
         protected int currentTicks, maxTicks;
         private bool _isMoving;
         public bool isMoving
@@ -32,7 +34,7 @@ namespace TechDemo1
                 }
                 if (value == true)
                 {
-                    calcPath();
+                    path = rogueMap.calcPath(playerEntity.Position, target.Position);
                 }
             }
         }
@@ -66,7 +68,11 @@ namespace TechDemo1
             target.Animation = targetAnimation;
             target.Position = new Point(1, 1);
 
-            rogueMap = new GameMap(mapHeight, mapWidth, this);
+            RogueSharp.MapCreation.IMapCreationStrategy<GameMap> mapCreationStrategy
+                = new MapTypes.SimpleMapCreationStrategy<GameMap>(mapWidth, mapHeight, 100, 30, 10);
+
+            rogueMap = mapCreationStrategy.CreateMap();
+            rogueMap.CopyApearanceTo(this);
             PlacePlayer();
         }
 
@@ -115,21 +121,6 @@ namespace TechDemo1
             }
         }
 
-        private void calcPath()
-        {
-            if ((playerEntity.Position.X == this.target.Position.X) && (playerEntity.Position.Y == this.target.Position.Y))
-            {
-                isMoving = false;
-                return;
-            }
-            try
-            {
-                //path = pathing.ShortestPath(rogueMap.GetCell(playerEntity.Position.X, playerEntity.Position.Y), rogueMap.GetCell(target.Position.X, target.Position.Y));
-            } catch (Exception e)
-            {
-                isMoving = false;
-            }
-        }
 
         public override bool ProcessMouse(MouseInfo info)
         {
@@ -147,7 +138,7 @@ namespace TechDemo1
 
         public void MoveTowardsTarget()
         {
-            //if (path.CurrentStep != path.End)
+            if (path.CurrentStep != path.End)
             {
                 RogueSharp.Cell targetCell = path.CurrentStep;
                 MovePlayerBy(new Point(targetCell.X, targetCell.Y) - playerEntity.Position);
