@@ -78,13 +78,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\Character.cs" />
+    <Compile Include="Map\GameMap.cs" />
     <Compile Include="UI\ChatPanel.cs" />
     <Compile Include="UI\GameMapConsole.cs" />
     <Compile Include="UI\GameScreen.cs" />
     <Compile Include="GameWorld.cs" />
-    <Compile Include="MapObjects\Floor.cs" />
-    <Compile Include="MapObjects\Wall.cs" />
-    <Compile Include="MapTypes\SimpleMap.cs" />
+    <Compile Include="Map\MapObjects\Floor.cs" />
+    <Compile Include="Map\MapObjects\Wall.cs" />
+    <Compile Include="Map\MapTypes\SimpleMapCreationStrategy.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UI\StatsPanel.cs" />
