@@ -20,9 +20,10 @@ namespace TechDemo1.NetworkClient
             var config = new NetPeerConfiguration("Multirogue Client");
             connection = new NetClient(config);
             connection.Start();
-            connection.Connect(host: ip, port : port);
+            connection.Connect(ip, port);
 
             clientReciever = new Thread(this.ClientRecieverThread);
+            clientReciever.Start();
         }
 
         private void ClientRecieverThread()

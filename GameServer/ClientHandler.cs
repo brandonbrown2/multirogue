@@ -27,6 +27,7 @@ namespace GameServer
                 var msg = server.ReadMessage();
                 if (msg.MessageType == NetIncomingMessageType.StatusChanged)
                 {
+                    System.Console.WriteLine("Client associated " + msg.SenderConnection.Status);
                     if (msg.SenderConnection.Status == NetConnectionStatus.Connected)
                     {
                         NetOutgoingMessage mapSeed = server.CreateMessage();

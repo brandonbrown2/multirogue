@@ -46,6 +46,7 @@ namespace GameServer
                 Console.WriteLine("Server Initialized!");
                 ClientHandler c = new ClientHandler(server, mapSeed);
                 clientHandler = new Thread(c.ClientMessageRecieverThread);
+                clientHandler.Start();
                 Console.WriteLine("Client Handler Initialized!");
                 Console.ReadKey();
             }
