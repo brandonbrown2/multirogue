@@ -10,6 +10,7 @@ namespace TechDemo1.Entities.Wrappers
     class CharacterInstanceWrapper
     {
         private Character characterReference;
+        public int EntityID;
 
         public void SetPosition(Point position)
         {
