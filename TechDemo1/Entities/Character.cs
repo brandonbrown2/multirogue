@@ -9,9 +9,11 @@ namespace TechDemo1.Entities
     class Character : GameObject
     {
         public Path Path;
+        public Point Destination;
         public GameMapConsole ParentConsole;
-        protected int currentTicks, maxTicks;
         public bool isMoving, isFocus;
+        protected int currentTicks, maxTicks;
+
 
         public Character(GameMapConsole ParentConsole)
         {

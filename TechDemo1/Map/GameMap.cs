@@ -32,7 +32,7 @@ namespace TechDemo1.Map
             {
                 if (cell.IsWalkable)
                 {
-                    mapData[cell.X, cell.Y] = new MapObjects.Floor();
+                    mapData[cell.X, cell.Y] = new MapObjects.Grass();
                 }
                 else
                 {
