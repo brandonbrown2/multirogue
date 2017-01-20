@@ -15,10 +15,12 @@ namespace TechDemo1.UI
         public static AnimatedTextSurface playerAnimation = new AnimatedTextSurface("default", 1, 1, Engine.DefaultFont);
         public static AnimatedTextSurface targetAnimation = new AnimatedTextSurface("default", 1, 1, Engine.DefaultFont);
         public static AnimatedTextSurface SecondPlayerAnimation = new AnimatedTextSurface("default", 1, 1, Engine.DefaultFont);
-
+        public static Random rand;
 
         public static void init()
         {
+            rand = new Random();
+
             playerAnimation.CreateFrame();
             playerAnimation.CurrentFrame[0].Foreground = Color.Orange;
             playerAnimation.CurrentFrame[0].GlyphIndex = '@';

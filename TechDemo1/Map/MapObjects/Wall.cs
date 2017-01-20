@@ -5,7 +5,7 @@ namespace TechDemo1.MapObjects
 {
     public class Wall : CellAppearance
     {
-        public Wall() : base(Color.White, Color.Gray, 176)
+        public Wall() : base(Color.White, Color.Gray, 178)
         {
 
         }
