@@ -17,7 +17,7 @@ namespace TechDemo1.Entities
             isFocus = true;
         }
 
-        public override void Move(Point amount)
+        public override void Shift(Point amount)
         {
             // Get the position the player will be at
             Point newPosition = ParentConsole.Position + amount;

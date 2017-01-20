@@ -39,13 +39,25 @@ namespace TechDemo1.Entities
                 base.Render();
             }
         }
-        public virtual void Move(Point amount)
+        public virtual void Shift(Point amount)
         {
             Position += amount;
         }
-        public virtual void MoveTo(Point newPosition)
+        public virtual void ShiftBy(Point newPosition)
         {
             Position = newPosition;
+        }
+        public virtual void Move()
+        {
+            if (Destination != null) {
+                Path = ParentConsole.rogueMap.calcPath(position, Destination);
+                isMoving = true;
+            }
+        }
+        public virtual void MoveTo(Point newDestination)
+        {
+            Destination = newDestination;
+            Move();
         }
         public virtual void MoveTowardsTarget()
         {
@@ -54,7 +66,7 @@ namespace TechDemo1.Entities
                 if (Path.CurrentStep != Path.End)
                 {
                     RogueSharp.Cell targetCell = Path.CurrentStep;
-                    MoveTo(new Point(targetCell.X, targetCell.Y));
+                    ShiftBy(new Point(targetCell.X, targetCell.Y));
                     if (isFocus)
                     {
                         ParentConsole.CenterViewOn(Position);
@@ -64,7 +76,7 @@ namespace TechDemo1.Entities
                 else
                 {
                     RogueSharp.Cell targetCell = Path.CurrentStep;
-                    MoveTo(new Point(targetCell.X, targetCell.Y));
+                    ShiftBy(new Point(targetCell.X, targetCell.Y));
                     if (isFocus)
                     {
                         ParentConsole.CenterViewOn(Position);

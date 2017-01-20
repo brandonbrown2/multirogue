@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TechDemo1.Entities.Wrappers
 {
-    class CharacterInstanceWrapper
+    public class CharacterInstanceWrapper
     {
         private Character characterReference;
         public int EntityID;
