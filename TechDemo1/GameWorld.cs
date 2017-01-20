@@ -19,7 +19,6 @@ namespace TechDemo1
         /// </summary>
         public static void Start(GameWindow window)
         {
-            UIConstants.init();
             GameWorld.window = window;
             window.AllowUserResizing = true;
 

@@ -5,6 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using SadConsole.Consoles;
 using Microsoft.Xna.Framework;
+using SadConsole.Game;
+using SadConsole;
+using TechDemo1.UI;
 
 namespace TechDemo1.Entities
 {
@@ -14,9 +17,28 @@ namespace TechDemo1.Entities
 
         public PlayerCharacterLocal(GameMapConsole ParentConsole) : base(ParentConsole)
         {
+            Font = Engine.DefaultFont;
+            Animation = UIConstants.playerAnimation;
+            Position = new Point(1, 1);
+
+            target = new GameObject(Engine.DefaultFont);
+            target.Animation = UIConstants.targetAnimation;
+            target.Position = new Point(1, 1);
             isFocus = true;
         }
-
+        public override void Render()
+        {
+            base.Render();
+            if (target.Position != position)
+            {
+                target.Render();
+            }
+        }
+        public override void SetRenderOffset(Point offset)
+        {
+            RenderOffset = offset;
+            target.RenderOffset = offset;
+        } 
         public override void Shift(Point amount)
         {
             // Get the position the player will be at
@@ -29,16 +51,17 @@ namespace TechDemo1.Entities
                 ParentConsole.CenterViewOn(newPosition);
             }
         }
-        public void MoveTargetTo(Point newPosition)
+        public override void SetDestination(Point newDestination)
         {
-            if (ParentConsole.isWithinMapAndScreen(newPosition))
+            if (ParentConsole.isWithinMapAndScreen(newDestination))
             {
-                target.Position = newPosition;
+                target.Position = newDestination;
+                Destination = newDestination;
             }
         }
-        public void MoveTargetBy(Point amount)
+        public void ShiftDestination(Point amount)
         {
-            MoveTargetTo(target.Position + amount);
+            SetDestination(target.Position + amount);
         }
         public void Teleport()
         {

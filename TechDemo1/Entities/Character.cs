@@ -39,6 +39,10 @@ namespace TechDemo1.Entities
                 base.Render();
             }
         }
+        public virtual void SetRenderOffset(Point offset)
+        {
+            RenderOffset = offset;
+        }
         public virtual void Shift(Point amount)
         {
             Position += amount;
@@ -58,6 +62,10 @@ namespace TechDemo1.Entities
         {
             Destination = newDestination;
             Move();
+        }
+        public virtual void SetDestination(Point newDestination)
+        {
+            Destination = newDestination;
         }
         public virtual void MoveTowardsTarget()
         {

@@ -1,9 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
+using SadConsole;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TechDemo1.UI;
 
 namespace TechDemo1.Entities
 {
@@ -13,6 +15,9 @@ namespace TechDemo1.Entities
         public PlayerCharacterRemote(GameMapConsole ParentConsole) : base(ParentConsole)
         {
             r = new Random();
+            Font = Engine.DefaultFont;
+            Animation = UIConstants.SecondPlayerAnimation;
+            Position = new Point(1, 1);
         }
         public override void Update()
         {
@@ -36,7 +41,7 @@ namespace TechDemo1.Entities
                     break;
                 }
             }
-            ParentConsole.pathCharacterTo(this, newTarget);
+            MoveTo(newTarget);
         }
     }
 }

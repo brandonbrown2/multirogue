@@ -22,11 +22,16 @@ namespace TechDemo1
     class GameMapConsole : SadConsole.Consoles.Console
     {
         public GameMap rogueMap;
-        private PlayerCharacterLocal playerEntity;
-        private PlayerCharacterRemote remotePlayerEntity;
+        private List<Character> entities;
         protected bool viewMoved = true;
 
-        public PlayerCharacterLocal Player { get { return playerEntity; } }
+        public PlayerCharacterLocal Player {
+            get
+            {
+                if (entities.Count > 0) return (PlayerCharacterLocal)entities[0];
+                return null;
+            }
+        }
 
         public GameMapConsole(int viewWidth, int viewHeight, int mapWidth, int mapHeight)
             : this(viewWidth, viewHeight, mapWidth, mapHeight, new RogueSharp.Random.DotNetRandom())
@@ -39,73 +44,56 @@ namespace TechDemo1
         {
             TextSurface.RenderArea = new Rectangle(0, 0, viewWidth, viewHeight);
 
-            playerEntity = new PlayerCharacterLocal(this);
-            playerEntity.Font = Engine.DefaultFont;
-            playerEntity.Animation = UIConstants.playerAnimation;
-            playerEntity.Position = new Point(1, 1);
+            entities = new List<Character>();
 
-            playerEntity.target = new GameObject(Engine.DefaultFont);
-            playerEntity.target.Animation = UIConstants.targetAnimation;
-            playerEntity.target.Position = new Point(1, 1);
-
-            remotePlayerEntity = new PlayerCharacterRemote(this);
-            remotePlayerEntity.Font = Engine.DefaultFont;
-            remotePlayerEntity.Animation = UIConstants.SecondPlayerAnimation;
-            remotePlayerEntity.Position = new Point(1, 1);
+            EntityGenerator.setGameConsole(this);
 
             RogueSharp.MapCreation.IMapCreationStrategy<GameMap> mapCreationStrategy
                 = new MapTypes.SimpleMapCreationStrategy<GameMap>(mapWidth, mapHeight, 100, 30, 10, r);
 
             rogueMap = mapCreationStrategy.CreateMap();
             rogueMap.CopyApearanceTo(this);
-            PlacePlayer();
         }
 
-        private void PlacePlayer()
+        public void AddEntity (Character character)
         {
-            playerEntity.Teleport();
-            CenterViewOn(playerEntity.Position);
+            entities.Add(character);
         }
-        public void pathCharacterTo(Character entity, Point target)
-        {
-            entity.Path = rogueMap.calcPath(entity.Position, target);
-            entity.isMoving = true;
-        }
+
         public override void Render()
         {
             base.Render();
 
-            // If he view area moved, we'll keep our entity in sync with it.
-            if (viewMoved)
+            foreach (Character c in entities)
             {
-                playerEntity.RenderOffset = Position - TextSurface.RenderArea.Location;
-                playerEntity.target.RenderOffset = Position - TextSurface.RenderArea.Location;
-                remotePlayerEntity.RenderOffset = Position - TextSurface.RenderArea.Location;
+                c.Render();
+                if (viewMoved)
+                {
+                    c.SetRenderOffset(Position - textSurface.RenderArea.Location);
+                }
             }
-            playerEntity.target.Render();
-            playerEntity.Render();
-            remotePlayerEntity.Render();
         }
 
         public override void Update()
         {
             base.Update();
-            playerEntity.Update();
-            playerEntity.target.Update();
-            remotePlayerEntity.Update();
+            foreach (Character c in entities)
+            {
+                c.Update();
+            }
         }
 
 
         public override bool ProcessMouse(MouseInfo info)
         {
-            if (info.LeftClicked)
+            if (info.LeftClicked && entities.Count > 0)
             {
                 base.ProcessMouse(info);
                 if (info.Console == this)
                 {
-                    playerEntity.MoveTargetTo(info.ConsoleLocation);
-                    playerEntity.isMoving = true;
-                    pathCharacterTo(playerEntity, playerEntity.target.Position);
+                    entities[0].SetDestination(info.ConsoleLocation);
+                    entities[0].isMoving = true;
+                    entities[0].Move();
                 }
             }
             return false;

@@ -68,50 +68,54 @@ namespace TechDemo1
         {
             int moveScale = 0;
             PlayerCharacterLocal player = ViewConsole.Player;
-            if (keyWaitCounter >= keyWait)
+            if (player != null)
             {
-                keyWaitCounter = 0;
-                moveScale = 1;
-                if (firstKey)
+                if (keyWaitCounter >= keyWait)
                 {
-                    keyWaitCounter = -keyWait * 2;
-                    firstKey = false;
+                    keyWaitCounter = 0;
+                    moveScale = 1;
+                    if (firstKey)
+                    {
+                        keyWaitCounter = -keyWait * 2;
+                        firstKey = false;
+                    }
                 }
-            }
 
-            if (info.KeysDown.Contains(AsciiKey.Get(Microsoft.Xna.Framework.Input.Keys.LeftShift)))
-            {
-                moveScale = moveScale * 5;
-            }
-            
-            if (info.KeysDown.Contains(AsciiKey.Get(Microsoft.Xna.Framework.Input.Keys.Down)))
-            {
-                keyWaitCounter++;
-                player.MoveTargetBy(new Point(0, moveScale));
-            }
-            else if (info.KeysDown.Contains(AsciiKey.Get(Microsoft.Xna.Framework.Input.Keys.Up)))
-            {
-                keyWaitCounter++;
-                player.MoveTargetBy(new Point(0, -moveScale));
-            }
-            else if (info.KeysDown.Contains(AsciiKey.Get(Microsoft.Xna.Framework.Input.Keys.Right)))
-            {
-                keyWaitCounter++;
-                player.MoveTargetBy(new Point(moveScale, 0));
-            }
-            else if (info.KeysDown.Contains(AsciiKey.Get(Microsoft.Xna.Framework.Input.Keys.Left)))
-            {
-                keyWaitCounter++;
-                player.MoveTargetBy(new Point(-moveScale, 0));
-            } else
-            {
-                firstKey = true;
-                keyWaitCounter = keyWait;
-            }
+                if (info.KeysDown.Contains(AsciiKey.Get(Microsoft.Xna.Framework.Input.Keys.LeftShift)))
+                {
+                    moveScale = moveScale * 5;
+                }
 
-            if (info.KeysPressed.Contains(AsciiKey.Get(Microsoft.Xna.Framework.Input.Keys.RightShift)))
-            {
-                ViewConsole.pathCharacterTo(player, player.target.Position);
+                if (info.KeysDown.Contains(AsciiKey.Get(Microsoft.Xna.Framework.Input.Keys.Down)))
+                {
+                    keyWaitCounter++;
+                    player.ShiftDestination(new Point(0, moveScale));
+                }
+                else if (info.KeysDown.Contains(AsciiKey.Get(Microsoft.Xna.Framework.Input.Keys.Up)))
+                {
+                    keyWaitCounter++;
+                    player.ShiftDestination(new Point(0, -moveScale));
+                }
+                else if (info.KeysDown.Contains(AsciiKey.Get(Microsoft.Xna.Framework.Input.Keys.Right)))
+                {
+                    keyWaitCounter++;
+                    player.ShiftDestination(new Point(moveScale, 0));
+                }
+                else if (info.KeysDown.Contains(AsciiKey.Get(Microsoft.Xna.Framework.Input.Keys.Left)))
+                {
+                    keyWaitCounter++;
+                    player.ShiftDestination(new Point(-moveScale, 0));
+                }
+                else
+                {
+                    firstKey = true;
+                    keyWaitCounter = keyWait;
+                }
+
+                if (info.KeysPressed.Contains(AsciiKey.Get(Microsoft.Xna.Framework.Input.Keys.RightShift)))
+                {
+                    player.MoveTo(player.target.Position);
+                }
             }
 
             return false;

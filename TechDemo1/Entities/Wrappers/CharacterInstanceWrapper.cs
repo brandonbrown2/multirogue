@@ -31,5 +31,10 @@ namespace TechDemo1.Entities.Wrappers
         {
             return characterReference.Destination;
         }
+
+        public void setCharacterReference(Object character)
+        {
+            characterReference = (Character)character;
+        }
     }
 }

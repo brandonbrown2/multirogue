@@ -7,6 +7,9 @@ using Console = SadConsole.Consoles.Console;
 using SadConsole.Consoles;
 using TechDemo1.NetworkClient;
 using Microsoft.Xna.Framework;
+using TechDemo1.Entities;
+using System.Threading;
+using TechDemo1.UI;
 
 namespace TechDemo1
 {
@@ -33,6 +36,11 @@ namespace TechDemo1
                 StartYourEngine(null, new Random().Next());
             }
         }
+        public static void MakeSinglePlayerStuff()
+        {
+            EntityGenerator.GenerateLocalCharacter();
+            EntityGenerator.GenerateRemoteCharacter();
+        }
 
         public static void StartYourEngine(object sender, int seed) {
             GameWorld.seed = seed;
@@ -54,11 +62,13 @@ namespace TechDemo1
 
         private static void Engine_EngineStart(object sender, EventArgs e)
         {
+            UIConstants.init();
             // Clear the default console
             SadConsole.Engine.ConsoleRenderStack.Clear();
             SadConsole.Engine.ActiveConsole = null;
 
             GameWorld.Start(window);
+            MakeSinglePlayerStuff();
         }
 
         private static void Engine_EngineUpdated(object sender, EventArgs e)
