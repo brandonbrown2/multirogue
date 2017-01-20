@@ -11,11 +11,13 @@ namespace GameServer
     {
         private NetServer server;
         private int mapSeedValue;
+        private Simulation game;
 
-        public ClientHandler (NetServer newServer, int mapSeed)
+        public ClientHandler (NetServer newServer, Simulation newGame)
         {
             server = newServer;
-            mapSeedValue = mapSeed;
+            game = newGame;
+            mapSeedValue = game.getMapSeed();
         }
 
         public void ClientMessageRecieverThread()
