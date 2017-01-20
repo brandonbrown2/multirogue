@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 
 namespace TechDemo1.Map
 {
-    class GameMap : RogueSharp.Map
+    public class GameMap : RogueSharp.Map
     {
         public SadConsole.CellAppearance[,] mapData;
         protected RogueSharp.PathFinder pathing;
