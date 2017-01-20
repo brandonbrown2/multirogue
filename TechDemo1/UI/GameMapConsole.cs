@@ -66,11 +66,11 @@ namespace TechDemo1
 
             foreach (Character c in entities)
             {
-                c.Render();
                 if (viewMoved)
                 {
                     c.SetRenderOffset(Position - textSurface.RenderArea.Location);
                 }
+                c.Render();
             }
         }
 

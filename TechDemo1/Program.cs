@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework;
 using TechDemo1.Entities;
 using System.Threading;
 using TechDemo1.UI;
+using SadConsole;
 
 namespace TechDemo1
 {
@@ -46,7 +47,7 @@ namespace TechDemo1
             GameWorld.seed = seed;
 
             // Setup the engine and creat the main window.
-            SadConsole.Engine.Initialize("Assets/Fonts/IBM.font", 180, 48, (g) => {
+            SadConsole.Engine.Initialize("Assets/Fonts/IBM2x.font", 90, 24, (g) => {
                 window = g.Window;
             });
 
@@ -57,6 +58,7 @@ namespace TechDemo1
             SadConsole.Engine.EngineUpdated += Engine_EngineUpdated;
 
             // Start the game.
+
             SadConsole.Engine.Run();
         }
 

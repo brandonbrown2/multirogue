@@ -25,13 +25,13 @@ namespace TechDemo1
         {
             keyWaitCounter = 0;
             firstKey = true;
-            StatsConsole = new StatsPanel(52, 37);
-            ViewConsole = new GameMapConsole(127, 37, 150, 150, r);
+            StatsConsole = new StatsPanel(26, 18);
+            ViewConsole = new GameMapConsole(63, 18, 150, 150, r);
             //ViewConsole.FillWithRandomGarbage(); // Temporary so we can see where the console is on the screen
-            MessageConsole = new ChatPanel(127, 11);
+            MessageConsole = new ChatPanel(63, 11);
 
             // Setup the message header to be as wide as the screen but only 1 character high
-            messageHeaderConsole = new Console(180, 1);
+            messageHeaderConsole = new Console(90, 1);
             messageHeaderConsole.DoUpdate = false;
             messageHeaderConsole.CanUseKeyboard = true;
             messageHeaderConsole.CanUseMouse = false;
@@ -41,15 +41,15 @@ namespace TechDemo1
 
             // Draw the line for the header
             messageHeaderConsole.Fill(Color.White, Color.Black, 196, null);
-            messageHeaderConsole.SetGlyph(127, 0, 193); // This makes the border match the character console's left-edge border
+            messageHeaderConsole.SetGlyph(63, 0, 193); // This makes the border match the character console's left-edge border
 
             // Print the header text
             messageHeaderConsole.Print(2, 0, " Messages ");
 
             // Move the rest of the consoles into position (ViewConsole is already in position at 0,0)
-            StatsConsole.Position = new Point(127, 0);
-            MessageConsole.Position = new Point(0, 38);
-            messageHeaderConsole.Position = new Point(0, 37);
+            StatsConsole.Position = new Point(63, 0);
+            MessageConsole.Position = new Point(0, 19);
+            messageHeaderConsole.Position = new Point(0, 18);
 
             // Add all consoles to this console list.
             Add(messageHeaderConsole);

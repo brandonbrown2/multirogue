@@ -19,7 +19,7 @@ namespace TechDemo1.Entities
         {
             isFocus = false;
             currentTicks = 0;
-            maxTicks = 5;
+            maxTicks = 10;
             isMoving = false;
             this.ParentConsole = ParentConsole;
         }
