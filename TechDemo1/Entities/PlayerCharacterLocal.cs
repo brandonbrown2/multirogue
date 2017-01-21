@@ -28,11 +28,14 @@ namespace TechDemo1.Entities
         }
         public override void Render()
         {
-            base.Render();
-            if (target.Position != position)
-            {
-                target.Render();
-            }
+            lock (positionLock) lock (destinationLock)
+                {
+                    base.Render();
+                    if (target.Position != position)
+                    {
+                        target.Render();
+                    }
+                }
         }
         public override void SetRenderOffset(Point offset)
         {

@@ -11,12 +11,14 @@ using TechDemo1.Entities;
 using System.Threading;
 using TechDemo1.UI;
 using SadConsole;
+using TechDemo1.Entities.Wrappers;
 
 namespace TechDemo1
 {
     class Program
     {
         public static GameWindow window;
+        public static CharacterInstanceWrapper secondPlayer;
         static void Main(string[] args)
         {
             NetworkClient.NetworkClient net = new NetworkClient.NetworkClient();
@@ -36,11 +38,6 @@ namespace TechDemo1
                 System.Console.ReadKey();
                 StartYourEngine(null, new Random().Next());
             }
-        }
-        public static void MakeSinglePlayerStuff()
-        {
-            EntityGenerator.GenerateLocalCharacter();
-            EntityGenerator.GenerateRemoteCharacter();
         }
 
         public static void StartYourEngine(object sender, int seed) {
@@ -77,5 +74,20 @@ namespace TechDemo1
         {
 
         }
+
+        public static void MakeSinglePlayerStuff()
+        {
+            EntityGenerator.GenerateLocalCharacter();
+            secondPlayer = EntityGenerator.GenerateRemoteCharacter();
+            new Thread(() => {
+                Random r = new Random();
+                while (true)
+                {
+                    secondPlayer.SetTarget(new Point(r.Next(30),r.Next(30)));
+                    Thread.Sleep(r.Next(500,2500));
+                }
+            }).Start();
+        }
+
     }
 }

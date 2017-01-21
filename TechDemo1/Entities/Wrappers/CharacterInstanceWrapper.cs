@@ -14,22 +14,28 @@ namespace TechDemo1.Entities.Wrappers
 
         public void SetPosition(Point position)
         {
-            characterReference.Position = position;
+            characterReference.Shift(position);
         }
 
         public Point GetPosition()
         {
-            return characterReference.Position;
+            lock (characterReference.positionLock)
+            {
+                return characterReference.Position;
+            }
         }
 
         public void SetTarget(Point destination)
         {
-            characterReference.Destination = destination;
+            characterReference.MoveTo(destination);
         }
 
         public Point GetTarget()
         {
-            return characterReference.Destination;
+            lock (characterReference.destinationLock)
+            {
+                return characterReference.Destination;
+            }
         }
 
         public void setCharacterReference(Object character)

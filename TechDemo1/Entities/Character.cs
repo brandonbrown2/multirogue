@@ -8,15 +8,20 @@ namespace TechDemo1.Entities
 {
     class Character : GameObject
     {
+        public object positionLock;
+        public object destinationLock;
+        public object pathingLock;
         public Path Path;
         public Point Destination;
         public GameMapConsole ParentConsole;
         public bool isMoving, isFocus;
         protected int currentTicks, maxTicks;
 
-
         public Character(GameMapConsole ParentConsole)
         {
+            positionLock = new object();
+            destinationLock = new object();
+            pathingLock = new object();
             isFocus = false;
             currentTicks = 0;
             maxTicks = 10;
@@ -34,10 +39,13 @@ namespace TechDemo1.Entities
         }
         public override void Render()
         {
-            if (ParentConsole.isWithinScreen(position))
-            {
-                base.Render();
-            }
+            lock (positionLock) lock (destinationLock)
+                {
+                    if (ParentConsole.isWithinScreen(position))
+                    {
+                        base.Render();
+                    }
+                }
         }
         public virtual void SetRenderOffset(Point offset)
         {
@@ -45,51 +53,73 @@ namespace TechDemo1.Entities
         }
         public virtual void Shift(Point amount)
         {
-            Position += amount;
+            lock (positionLock)
+            {
+                Position += amount;
+            }
         }
         public virtual void ShiftBy(Point newPosition)
         {
-            Position = newPosition;
+            lock (positionLock)
+            {
+                Position = newPosition;
+            }
         }
         public virtual void Move()
         {
-            if (Destination != null) {
-                Path = ParentConsole.rogueMap.calcPath(position, Destination);
-                isMoving = true;
+            lock (positionLock)
+            {
+                if (Destination != null)
+                {
+                    if (ParentConsole.rogueMap.GetCell(Destination.X, Destination.Y).IsWalkable)
+                    {
+                        Path = ParentConsole.rogueMap.calcPath(position, Destination);
+                        isMoving = true;
+                    }
+                }
             }
         }
         public virtual void MoveTo(Point newDestination)
         {
-            Destination = newDestination;
+            lock (destinationLock)
+            {
+                Destination = newDestination;
+            }
             Move();
         }
         public virtual void SetDestination(Point newDestination)
         {
-            Destination = newDestination;
+            lock (positionLock)
+            {
+                Destination = newDestination;
+            }
         }
         public virtual void MoveTowardsTarget()
         {
-            if ((Path != null) && isMoving)
+            lock (pathingLock)
             {
-                if (Path.CurrentStep != Path.End)
+                if ((Path != null) && isMoving)
                 {
-                    RogueSharp.Cell targetCell = Path.CurrentStep;
-                    ShiftBy(new Point(targetCell.X, targetCell.Y));
-                    if (isFocus)
+                    if (Path.CurrentStep != Path.End)
                     {
-                        ParentConsole.CenterViewOn(Position);
+                        RogueSharp.Cell targetCell = Path.CurrentStep;
+                        ShiftBy(new Point(targetCell.X, targetCell.Y));
+                        if (isFocus)
+                        {
+                            ParentConsole.CenterViewOn(Position);
+                        }
+                        Path.StepForward();
                     }
-                    Path.StepForward();
-                }
-                else
-                {
-                    RogueSharp.Cell targetCell = Path.CurrentStep;
-                    ShiftBy(new Point(targetCell.X, targetCell.Y));
-                    if (isFocus)
+                    else
                     {
-                        ParentConsole.CenterViewOn(Position);
+                        RogueSharp.Cell targetCell = Path.CurrentStep;
+                        ShiftBy(new Point(targetCell.X, targetCell.Y));
+                        if (isFocus)
+                        {
+                            ParentConsole.CenterViewOn(Position);
+                        }
+                        isMoving = false;
                     }
-                    isMoving = false;
                 }
             }
         }
