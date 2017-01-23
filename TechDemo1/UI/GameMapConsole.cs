@@ -19,7 +19,7 @@ using TechDemo1.UI;
 
 namespace TechDemo1
 {
-    class GameMapConsole : SadConsole.Consoles.Console
+    public class GameMapConsole : SadConsole.Consoles.Console
     {
         public GameMap rogueMap;
         private List<Character> entities;

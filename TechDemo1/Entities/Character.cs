@@ -6,7 +6,7 @@ using SadConsole.Game;
 
 namespace TechDemo1.Entities
 {
-    class Character : GameObject
+    public class Character : GameObject
     {
         public object positionLock;
         public object destinationLock;

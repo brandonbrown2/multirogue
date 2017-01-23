@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Lidgren.Network;
+using Microsoft.Xna.Framework;
 
 namespace TechDemo1.NetworkClient
 {
@@ -14,6 +15,8 @@ namespace TechDemo1.NetworkClient
         private Thread clientReciever;
         public delegate void seedReceivedHandler(object sender, int seed);
         public seedReceivedHandler seedReceived;
+        public delegate void playerLocalSpawnHandler(object sender, int entityID, Point spawnLocation);
+        public playerLocalSpawnHandler spawnMe;
 
         public void ConnectToServer(string ip, int port)
         {
@@ -37,6 +40,8 @@ namespace TechDemo1.NetworkClient
                     if (packetType == "Map Seed Value")
                     {
                         seedReceived(this, msg.ReadInt32());
+                        msg.ReadString();
+                        spawnMe(this, msg.ReadInt32(), new Point(msg.ReadInt32(), msg.ReadInt32()));
                     }
                 }
             }

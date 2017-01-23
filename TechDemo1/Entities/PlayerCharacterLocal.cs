@@ -11,7 +11,7 @@ using TechDemo1.UI;
 
 namespace TechDemo1.Entities
 {
-    class PlayerCharacterLocal : Character
+    public class PlayerCharacterLocal : Character
     {
         public SadConsole.Game.GameObject target;
 
