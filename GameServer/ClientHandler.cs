@@ -56,6 +56,7 @@ namespace GameServer
                     if(packetType == "Load Entities")
                     {
                         NetOutgoingMessage response = server.CreateMessage();
+                        response.Write("Entity List");
                         game.GenerateEntityList(response);
                         server.SendMessage(response, msg.SenderConnection, NetDeliveryMethod.ReliableOrdered);
                     }

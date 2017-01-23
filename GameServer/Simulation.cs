@@ -53,6 +53,15 @@ namespace GameServer
 
         public void GenerateEntityList(NetOutgoingMessage response)
         {
+            foreach(KeyValuePair<int, MockCharacter> CharacterLookup in PlayerDictionary)
+            {
+                response.Write("Player");
+                response.Write(CharacterLookup.Key);
+                response.Write(CharacterLookup.Value.currentLoc.X);
+                response.Write(CharacterLookup.Value.currentLoc.Y);
+                response.Write(CharacterLookup.Value.targetLoc.X);
+                response.Write(CharacterLookup.Value.targetLoc.Y);
+            }
         }
 
         public Point FindSpawnLocation()

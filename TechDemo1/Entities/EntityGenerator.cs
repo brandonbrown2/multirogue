@@ -27,6 +27,17 @@ namespace TechDemo1.Entities
             characterRef.setCharacterReference(newCharacter);
             return characterRef;
         }
+        public static CharacterInstanceWrapper GenerateRemoteCharacter(int entityID, Point location, Point destination)
+        {
+            CharacterInstanceWrapper characterRef = new CharacterInstanceWrapper();
+            Character newCharacter = new PlayerCharacterRemote(gameReference);
+            gameReference.AddEntity(newCharacter);
+            characterRef.setCharacterReference(newCharacter);
+            characterRef.EntityID = entityID;
+            characterRef.SetPosition(location);
+            characterRef.SetTarget(destination);
+            return characterRef;
+        }
         public static CharacterInstanceWrapper GenerateLocalCharacter(int entityID, Point location)
         {
             CharacterInstanceWrapper characterRef = new CharacterInstanceWrapper();

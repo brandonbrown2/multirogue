@@ -22,12 +22,15 @@ namespace TechDemo1
         public static bool singleplayer = true;
         private static int myEntityID = 0;
         private static Point myStartingPoint = new Point(1, 1);
+        public static NetworkClient.NetworkClient net;
+        private static IDictionary<int, CharacterInstanceWrapper> PlayerDictionary;
         static void Main(string[] args)
         {
-            NetworkClient.NetworkClient net = new NetworkClient.NetworkClient();
+            net = new NetworkClient.NetworkClient();
             net.seedReceived += StartYourEngine;
             net.spawnMe += SetMultiPlayerData;
             net.gameType += SetSinglePlayerStatus;
+            net.addPlayer = addRemotePlayer;
 
             System.Console.Write("IP : ");
             String ip = System.Console.ReadLine();
@@ -89,20 +92,36 @@ namespace TechDemo1
         public static void MakeSinglePlayerStuff()
         {
             EntityGenerator.GenerateLocalCharacter(myEntityID, myStartingPoint);
-            secondPlayer = EntityGenerator.GenerateRemoteCharacter();
-            new Thread(() => {
-                Random r = new Random();
-                while (true)
+            if (singleplayer)
+            {
+                secondPlayer = EntityGenerator.GenerateRemoteCharacter();
+                new Thread(() =>
                 {
-                    secondPlayer.SetTarget(new Point(r.Next(30), r.Next(30)));
-                    Thread.Sleep(r.Next(500, 2500));
-                }
-            }).Start();
+                    Random r = new Random();
+                    while (true)
+                    {
+                        secondPlayer.SetTarget(new Point(r.Next(30), r.Next(30)));
+                        Thread.Sleep(r.Next(500, 2500));
+                    }
+                }).Start();
+            }
+            else
+            {
+                net.RequestEntityList();
+            }
         }
 
         public static void SetSinglePlayerStatus(object sender, bool gameType)
         {
             singleplayer = gameType;
+        }
+
+        public static void addRemotePlayer(object sender, int entityID, Point current, Point destination)
+        {
+            if(myEntityID != entityID)
+            {
+                EntityGenerator.GenerateRemoteCharacter(entityID, current, destination);
+            }
         }
 
     }

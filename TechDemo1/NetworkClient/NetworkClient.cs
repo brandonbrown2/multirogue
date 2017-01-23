@@ -19,6 +19,8 @@ namespace TechDemo1.NetworkClient
         public playerLocalSpawnHandler spawnMe;
         public delegate void setGameTypeHandler(object sender, bool status);
         public setGameTypeHandler gameType;
+        public delegate void playerRemoteSpawnHandler(object sender, int entityID, Point spawnLocation, Point destination);
+        public playerRemoteSpawnHandler addPlayer;
 
         public void ConnectToServer(string ip, int port)
         {
@@ -28,6 +30,13 @@ namespace TechDemo1.NetworkClient
             clientReciever.Start();
             connection.Start();
             connection.Connect(ip, port);
+        }
+
+        public void RequestEntityList()
+        {
+            NetOutgoingMessage request = connection.CreateMessage();
+            request.Write("Load Entities");
+            connection.SendMessage(request, NetDeliveryMethod.ReliableOrdered);
         }
 
         private void ClientRecieverThread()
@@ -46,6 +55,17 @@ namespace TechDemo1.NetworkClient
                         msg.ReadString();
                         spawnMe(this, msg.ReadInt32(), new Point(msg.ReadInt32(), msg.ReadInt32()));
                         seedReceived(this, mapSeed);
+                    }
+                    else if(packetType == "Entity List")
+                    {
+                        while(msg.PositionInBytes != msg.LengthBytes)
+                        {
+                            string entityType = msg.ReadString();
+                            if(entityType == "Player")
+                            {
+                                addPlayer(this, msg.ReadInt32(), new Point(msg.ReadInt32(), msg.ReadInt32()), new Point(msg.ReadInt32(), msg.ReadInt32()));
+                            }
+                        }
                     }
                 }
             }
