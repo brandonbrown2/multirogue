@@ -46,7 +46,7 @@ namespace GameServer
                         mapSeed.Write(playerCount);
                         mapSeed.Write(start.X);
                         mapSeed.Write(start.Y);
-                        playerCount = playerCount++;
+                        playerCount += 1;
                         server.SendMessage(mapSeed, msg.SenderConnection, NetDeliveryMethod.ReliableOrdered);
                     }
                 }

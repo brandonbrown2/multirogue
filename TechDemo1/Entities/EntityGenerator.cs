@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TechDemo1.Entities.Wrappers;
+using Microsoft.Xna.Framework;
 
 namespace TechDemo1.Entities
 {
@@ -26,12 +27,14 @@ namespace TechDemo1.Entities
             characterRef.setCharacterReference(newCharacter);
             return characterRef;
         }
-        public static CharacterInstanceWrapper GenerateLocalCharacter()
+        public static CharacterInstanceWrapper GenerateLocalCharacter(int entityID, Point location)
         {
             CharacterInstanceWrapper characterRef = new CharacterInstanceWrapper();
             Character newCharacter = new PlayerCharacterLocal(gameReference);
             gameReference.AddEntity(newCharacter);
             characterRef.setCharacterReference(newCharacter);
+            characterRef.SetPosition(location);
+            characterRef.EntityID = entityID;
             return characterRef;
         }
 

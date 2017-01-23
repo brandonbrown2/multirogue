@@ -17,6 +17,8 @@ namespace TechDemo1.NetworkClient
         public seedReceivedHandler seedReceived;
         public delegate void playerLocalSpawnHandler(object sender, int entityID, Point spawnLocation);
         public playerLocalSpawnHandler spawnMe;
+        public delegate void setGameTypeHandler(object sender, bool status);
+        public setGameTypeHandler gameType;
 
         public void ConnectToServer(string ip, int port)
         {
@@ -39,9 +41,11 @@ namespace TechDemo1.NetworkClient
                     string packetType = msg.ReadString();
                     if (packetType == "Map Seed Value")
                     {
-                        seedReceived(this, msg.ReadInt32());
+                        gameType(this, false);
+                        int mapSeed = msg.ReadInt32();
                         msg.ReadString();
                         spawnMe(this, msg.ReadInt32(), new Point(msg.ReadInt32(), msg.ReadInt32()));
+                        seedReceived(this, mapSeed);
                     }
                 }
             }
