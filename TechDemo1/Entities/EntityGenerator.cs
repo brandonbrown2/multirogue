@@ -7,7 +7,7 @@ using TechDemo1.Entities.Wrappers;
 
 namespace TechDemo1.Entities
 {
-    class EntityGenerator
+    public class EntityGenerator
     {
         private static GameMapConsole gameReference;
         public static CharacterInstanceWrapper GenerateCharacter()
