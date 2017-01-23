@@ -15,11 +15,17 @@ namespace GameServer
 {
     class Simulation
     {
+        private class MockCharacter
+        {
+            public Point currentLoc;
+            public Point targetLoc;
+        }
+
         private int mapSizeX = 150;
         private int mapSizeY = 150;
         private int mapSeedValue;
         private GameMap map;
-        private IDictionary<int, CharacterInstanceWrapper> PlayerDictionary;
+        private IDictionary<int, MockCharacter> PlayerDictionary;
 
         public Simulation()
         {
@@ -30,7 +36,7 @@ namespace GameServer
                 = new TechDemo1.MapTypes.SimpleMapCreationStrategy<GameMap>(mapSizeX, mapSizeY, 100, 30, 10, new RogueSharp.Random.DotNetRandom(mapSeedValue));
             map = mapCreationStrategy.CreateMap();
 
-            PlayerDictionary = new Dictionary<int, CharacterInstanceWrapper>();
+            PlayerDictionary = new Dictionary<int, MockCharacter>();
         }
 
         public int getMapSeed()
@@ -40,9 +46,9 @@ namespace GameServer
 
         public Point spawnNewPlayer(int newPlayer)
         {
-            PlayerDictionary.Add(newPlayer, EntityGenerator.GenerateRemoteCharacter());
-            PlayerDictionary[newPlayer].SetPosition(FindSpawnLocation());
-            return PlayerDictionary[newPlayer].GetPosition();
+            PlayerDictionary.Add(newPlayer, new MockCharacter());
+            PlayerDictionary[newPlayer].currentLoc = FindSpawnLocation();
+            return PlayerDictionary[newPlayer].currentLoc;
         }
 
         public void GenerateEntityList(NetOutgoingMessage response)
