@@ -6,9 +6,9 @@ using TechDemo1.UI;
 
 namespace TechDemo1.MapObjects
 {
-    public class Grass : CellAppearance, IDeterministicCellAppearance
+    public class Tree : CellAppearance, IDeterministicCellAppearance
     {
-        public Grass() : base(Color.LightGreen, Color.Transparent, 176)
+        public Tree() : base(Color.DarkGreen, Color.Transparent, 5)
         {
         }
 

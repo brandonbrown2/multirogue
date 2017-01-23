@@ -71,7 +71,7 @@ namespace TechDemo1.Entities
             {
                 if (Destination != null)
                 {
-                    if (ParentConsole.rogueMap.GetCell(Destination.X, Destination.Y).IsWalkable)
+                    if (ParentConsole.rogueMap.IsWalkable(Destination.X, Destination.Y))
                     {
                         Path = ParentConsole.rogueMap.calcPath(position, Destination);
                         isMoving = true;

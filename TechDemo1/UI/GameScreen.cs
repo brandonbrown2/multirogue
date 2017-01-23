@@ -17,11 +17,11 @@ namespace TechDemo1
         private Console messageHeaderConsole;
         private bool firstKey;
 
-        public GameScreen() : this(new RogueSharp.Random.DotNetRandom())
+        public GameScreen() : this(new System.Random())
         {
 
         }
-        public GameScreen(RogueSharp.Random.DotNetRandom r)
+        public GameScreen(System.Random r)
         {
             keyWaitCounter = 0;
             firstKey = true;

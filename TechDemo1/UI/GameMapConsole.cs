@@ -34,25 +34,22 @@ namespace TechDemo1
         }
 
         public GameMapConsole(int viewWidth, int viewHeight, int mapWidth, int mapHeight)
-            : this(viewWidth, viewHeight, mapWidth, mapHeight, new RogueSharp.Random.DotNetRandom())
+            : this(viewWidth, viewHeight, mapWidth, mapHeight, new System.Random())
         {
 
         }
 
-        public GameMapConsole(int viewWidth, int viewHeight, int mapWidth, int mapHeight, IRandom r)
+        public GameMapConsole(int viewWidth, int viewHeight, int mapWidth, int mapHeight, System.Random r)
             : base(mapWidth, mapHeight)
         {
             TextSurface.RenderArea = new Rectangle(0, 0, viewWidth, viewHeight);
+
 
             entities = new List<Character>();
 
             EntityGenerator.setGameConsole(this);
 
-            RogueSharp.MapCreation.IMapCreationStrategy<GameMap> mapCreationStrategy
-                = new MapTypes.SimpleMapCreationStrategy<GameMap>(mapWidth, mapHeight, 100, 30, 10, r);
-
-            rogueMap = mapCreationStrategy.CreateMap();
-            rogueMap.CopyApearanceTo(this);
+            rogueMap = new GameMap(mapHeight, mapWidth, this, r);
         }
 
         public void AddEntity (Character character)
@@ -63,7 +60,7 @@ namespace TechDemo1
         public override void Render()
         {
             base.Render();
-
+            rogueMap.Render();
             foreach (Character c in entities)
             {
                 if (viewMoved)

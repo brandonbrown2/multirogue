@@ -19,7 +19,7 @@ namespace TechDemo1.UI
 
         public static void init()
         {
-            rand = new Random();
+            rand = new Random(GameWorld.seed);
 
             playerAnimation.CreateFrame();
             playerAnimation.CurrentFrame[0].Foreground = Color.Orange;

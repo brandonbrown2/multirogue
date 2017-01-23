@@ -104,7 +104,13 @@
     <Compile Include="Entities\PlayerCharacterRemote.cs" />
     <Compile Include="Entities\Wrappers\CharacterInstanceWrapper.cs" />
     <Compile Include="Map\GameMap.cs" />
+    <Compile Include="Map\IDeterministicCellAppearance.cs" />
+    <Compile Include="Map\MapObjects\EmptyCell.cs" />
+    <Compile Include="Map\MapObjects\Tile.cs" />
+    <Compile Include="Map\MapObjects\Bush.cs" />
+    <Compile Include="Map\MapObjects\Tree.cs" />
     <Compile Include="Map\MapObjects\Grass.cs" />
+    <Compile Include="Map\MapObjects\Door.cs" />
     <Compile Include="NetworkClient\NetworkClient.cs" />
     <Compile Include="UI\ChatPanel.cs" />
     <Compile Include="UI\GameMapConsole.cs" />
