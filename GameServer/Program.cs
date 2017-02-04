@@ -18,8 +18,7 @@ namespace GameServer
         static private Simulation game;
         static void Main(string[] args)
         {
-
-            GameMap g = new TechDemo1.Map.GameMap();
+            
             //TODO: Create Map
             //TODO: Init Outgoing Data Handler thread
             //TODO: Init Simulation(?)

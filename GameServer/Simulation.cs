@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using RogueSharp.Random;
 using TechDemo1.Map;
 using TechDemo1.MapTypes;
 using TechDemo1.Entities;
@@ -29,13 +28,9 @@ namespace GameServer
 
         public Simulation()
         {
-            var randomgen = new RogueSharp.Random.DotNetRandom();
+            var randomgen = new Random();
             mapSeedValue = randomgen.Next(Int32.MaxValue - 1);
-
-            RogueSharp.MapCreation.IMapCreationStrategy<GameMap> mapCreationStrategy
-                = new TechDemo1.MapTypes.SimpleMapCreationStrategy<GameMap>(mapSizeX, mapSizeY, 100, 30, 10, new RogueSharp.Random.DotNetRandom(mapSeedValue));
-            map = mapCreationStrategy.CreateMap();
-
+            map = new GameMap(mapSizeX, mapSizeY, null, new Random(mapSeedValue));
             PlayerDictionary = new Dictionary<int, MockCharacter>();
         }
 
