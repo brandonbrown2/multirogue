@@ -31,7 +31,10 @@ namespace TechDemo1.Map
             collisionMap.Clear(true, true);
 
             mapData = new LayeredTextSurface(mapWidth, mapHeight, 2);
-            mapData.RenderArea = ParentConsole.TextSurface.RenderArea;
+            if (ParentConsole != null)
+            {
+                mapData.RenderArea = ParentConsole.TextSurface.RenderArea;
+            }
             TextSurface = mapData;
             editor = new SurfaceEditor(mapData);
 
